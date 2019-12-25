@@ -10,7 +10,7 @@ more /root/moninfo|awk -F',' '{print $3","$6}'|sed 's/%//g'| awk -F',' '{if ($2>
 
 #检查最后一次获得负载信息的时间，如与当前时间相差超过15分钟，则报警
 #20170119 10:15:08	192.168.200.8
-dbdates=(`echo "select a.date,a.ip from moninfo as a inner join hostip as b on trim(a.ip)=trim(b.ip)"|mysql -uroot -D moninfo`)
+dbdates=(`echo "select a.date,a.ip from moninfo as a inner join hostip as b on trim(a.ip)=trim(b.ip)"|mysql -uyanght -pyanght -h192.168.100.71 -D moninfo`)
 curdate=(`date '+%Y%m%d %T'`)
 length=${#dbdates[@]}
 rows=$[($length+1) / 3]
