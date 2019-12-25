@@ -1,0 +1,13 @@
+#docker build -t moncenter -f ./dockerfile.alpine.monagent.center .  
+FROM alpine:3.10
+#RUN echo  'http://mirrors.ustc.edu.cn/alpine/v3.10/main'> /etc/apk/repositories && \
+#echo  'http://mirrors.ustc.edu.cn/alpine/v3.10/community' >>/etc/apk/repositories && \
+RUN  uname -a && \
+echo  'http://mirrors.tuna.tsinghua.edu.cn/alpine/v3.10/main'> /etc/apk/repositories && \
+echo  'http://mirrors.tuna.tsinghua.edu.cn/alpine/v3.10/community' >>/etc/apk/repositories && \
+cat /etc/apk/repositories && \
+apk add  py2-urllib3 py-mysqlclient
+#apk add  --no-cache nginx uwsgi uwsgi-python py-flask py-mysqlclient
+COPY . /monagent.center
+WORKDIR /monagent.center
+CMD ["python", "/monagent.center/dwloadmon.py", "dwmoninfo"]

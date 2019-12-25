@@ -3,11 +3,15 @@ import MySQLdb
 import sys,urllib,urllib2
 #modify these item to suit your monitor system:
 secid='5toRb5lCdEU2q5H'
-serverip="119.254.98.237"
-serverip2="119.254.98.237"
+serverip="192.168.10.92"
+serverip2=""
 port="18000"
-monroot="/root"
-f = open(monroot+'/server8000.log','a')
+monroot="./info"                            #mysql server think's directory
+MYHOST="192.168.100.71"
+MYUSER="yanght"
+MYPWD="yanght"
+MYHOME='/export/opt/cmp_mysql2/mysql/info/'  #Host access directory
+f = open('./server8000.log','a')
 
 #download baseinfo
 class WebDownfile():
@@ -25,11 +29,11 @@ class WebDownfile():
 			response = urllib2.urlopen(req)
 			self.the_page = response.read()	
 		print self.the_page
-		f1 = open('baseinfo','wb')
+		f1 = open( MYHOME + 'baseinfo','wb')
 		f1.write(self.the_page)
 		f1.close()
 		try:
-			conn=MySQLdb.connect(host='localhost',user='root',passwd='',db='cmdb',port=3306,charset='utf8')
+			conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='cmdb',port=3306,charset='utf8')
 			cur=conn.cursor()
 			#sql=("LOAD DATA LOW_PRIORITY INFILE '/root/baseinfo' REPLACE INTO TABLE `cmdb`.`basetmp` CHARACTER SET gbk FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`hostname`, `ip`, `username`, `cpu`, `mem`, `storage`, `system`, `timezone`);")
 			sql=("delete from cmdb.basetmp")
@@ -66,14 +70,14 @@ class WebDownfile2():
 		print self.the_page
 		content = self.the_page
 		try:
-			f2 = open('moninfo','wb')
+			f2 = open(MYHOME + 'moninfo','wb')
 			f2.write(content)
 			f2.close()
 		finally:
 			filewrited = 1
 		if filewrited == 1:
 			try:
-				conn=MySQLdb.connect(host='localhost',user='root',passwd='',db='moninfo',port=3306,charset='utf8')
+				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='moninfo',port=3306,charset='utf8')
 				cur=conn.cursor()
 				sql=('delete from moninfo.moninfo')
 		   		print sql
@@ -110,14 +114,14 @@ class WebDownfile3():
 		print self.the_page
 		content = self.the_page
 		try:
-			f2 = open('portinfo','wb')
+			f2 = open(MYHOME + 'portinfo','wb')
 			f2.write(content)
 			f2.close()
 		finally:
 			filewrited = 1
 		if filewrited == 1:
 			try:
-				conn=MySQLdb.connect(host='localhost',user='root',passwd='',db='moninfo',port=3306,charset='utf8')
+				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='moninfo',port=3306,charset='utf8')
 				cur=conn.cursor()
 				sql=('delete from moninfo.portinfo')
 		   		print sql
@@ -154,14 +158,14 @@ class WebDownfile4():
 		print self.the_page
 		content = self.the_page
 		try:
-			f2 = open('bakinfo','wb')
+			f2 = open(MYHOME + 'bakinfo','wb')
 			f2.write(content)
 			f2.close()
 		finally:
 			filewrited = 1
 		if filewrited == 1:
 			try:
-				conn=MySQLdb.connect(host='localhost',user='root',passwd='',db='moninfo',port=3306,charset='utf8')
+				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='moninfo',port=3306,charset='utf8')
 				cur=conn.cursor()
 				sql=('delete from moninfo.bakinfo')
 		   		print sql
