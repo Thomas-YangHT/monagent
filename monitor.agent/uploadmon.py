@@ -3,11 +3,38 @@ import sys,urllib,urllib2
 import  re
 
 secid='5toRb5lCdEU2q5H'
-serverip="139.198.6.146"
+serverip="192.168.10.92"
 serverip2=""
 #serverip2="119.254.98.237"
 port="18000"
-monroot="/root/"
+monroot="./"
+NETWORK="192.168.10"
+(status,ETH) = commands.getstatusoutput('ip a|grep ' + NETWORK +'|awk \'{print $7}\'|grep -v "lo:"')
+print("eth:"+ETH)
+
+def GetIp():
+	(status,system)  = commands.getstatusoutput('uname -a')
+	if system.find('FreeBSD') != -1 :
+		#(status,mac) = commands.getstatusoutput('ifconfig |grep ether|awk \'{print $2}\'')
+		(status,ip) = commands.getstatusoutput("ifconfig em0| egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | awk '{print $2,$4}'")
+		(ip,netmask)=ip.split()
+		print status,ip
+		print ip,netmask
+	elif system.find('Linux') != -1 :	
+		#example: take internal ip addr
+		(status,ip) = commands.getstatusoutput("ifconfig "+ETH+"| egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | awk '{print $2,$4}'|sed -e 's/addr://' -e 's/Mask://'")
+		(ip,netmask)=ip.split()
+		print status,ip
+		print ip,netmask
+		#example: obtain external network IP addr
+		if ip.find('10.') !=-1  and  ip.find('192.168.') ==-1 and ip.find('172.16') ==-1 :
+			(status,ip) = commands.getstatusoutput('/usr/bin/curl  whatismyip.akamai.com')
+			if status != 0 :
+				(status,ip) = commands.getstatusoutput('/usr/bin/curl  whatismyip.akamai.com')
+			if status != 0 :
+				(status,ip) = commands.getstatusoutput('/usr/bin/wget -qO - ifconfig.co')
+			ip =  ip.split('\n')[-1]
+	return ip,netmask
 
 #upload portinfo (self's port process message)
 class WebForm3(): 
@@ -18,36 +45,9 @@ class WebForm3():
 	typename='portinfo'
 	(status,hostname) = commands.getstatusoutput('hostname')
 	print status,hostname
-
-	#(status,tz) = commands.getstatusoutput('tail -n 1 /etc/localtime')
-	(status,system)  = commands.getstatusoutput('uname -a')
 	(status,ports)    = commands.getstatusoutput("netstat -anp|grep LISTEN|grep -v unix|sed -e 's/:::/:/g'|awk '{print $4\",\"$7}'|awk -F':' '{print $2}'|sed -e 's/\\.\\///g' -e 's/\\//,/g'|sort |uniq|awk -F',' '{printf \"%s:%s;\",$1,$3}'")
-	#(status,pid)     = commands.getstatusoutput("netstat -anp|grep LISTEN|grep -v unix|sed -e 's/:::/:/g'|awk '{print $4\",\"$7}'|awk -F':' '{print $2}'|sed -e 's/\\.\\///g' -e 's/\\//,/g'|sort |uniq|awk -F',' '{printf \"%s;\",$2}'")
-	#(status,process) = commands.getstatusoutput("netstat -anp|grep LISTEN|grep -v unix|sed -e 's/:::/:/g'|awk '{print $4\",\"$7}'|awk -F':' '{print $2}'|sed -e 's/\\.\\///g' -e 's/\\//,/g'|sort |uniq|awk -F',' '{printf \"%s;\",$3}'")
+	(ip,netmask)=GetIp()
 	
-	if system.find('FreeBSD') != -1 :
-		#(status,mac) = commands.getstatusoutput('ifconfig |grep ether|awk \'{print $2}\'')
-		(status,ip) = commands.getstatusoutput("ifconfig em0| egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | awk '{print $2,$4}'")
-		(ip,netmask)=ip.split()
-		print status,ip
-		print ip,netmask
-
-	elif system.find('Linux') != -1 :	
-		#example: take internal ip addr
-		(status,ip) = commands.getstatusoutput("/usr/sbin/ifconfig eth0| /usr/bin/egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | /usr/bin/awk '{print $2,$4}'|sed -e 's/addr://'")
-		(ip,netmask)=ip.split()
-		print status,ip
-		print ip,netmask
-		#netmask = tmpip[1].split(':')
-		#example: obtain external network IP addr
-		if ip.find('10.') !=-1  and  ip.find('192.168.') ==-1 and ip.find('172.16') ==-1 :
-			(status,ip) = commands.getstatusoutput('/usr/bin/curl  whatismyip.akamai.com')
-			if status != 0 :
-				(status,ip) = commands.getstatusoutput('/usr/bin/curl  whatismyip.akamai.com')
-			if status != 0 :
-				(status,ip) = commands.getstatusoutput('/usr/bin/wget -qO - ifconfig.co')
-			ip =  ip.split('\n')[-1]
-
 	the_page = '' 
 	def login3(self): 
 		values = {
@@ -56,8 +56,6 @@ class WebForm3():
 		'hostname' : self.hostname, 
 		'ip' : self.ip, 
 		'ports'  : self.ports,
-		#'pid'   : self.pid,
-		#'process' : self.process,	
 		} 
 		print values
 		print self.url_login
@@ -67,7 +65,7 @@ class WebForm3():
 		self.the_page = response.read()
 		if serverip2 != "" :
 			print "server2 uploading..."
-			req = urllib2.Request(self.url_login2, postdata) 
+			req = urllib2.Request(self.url_login, postdata) 
 			response = urllib2.urlopen(req)
 			self.the_page = response.read()			
 		#print self.the_page
@@ -81,46 +79,21 @@ class WebForm2():
 	typename='moninfo'
 	(status,hostname) = commands.getstatusoutput('hostname')
 	print status,hostname
-
-	#(status,tz) = commands.getstatusoutput('tail -n 1 /etc/localtime')
-	(status,system) = commands.getstatusoutput('uname -a')
-	#(status,storage) = commands.getstatusoutput('df -h |grep \'^/dev/\'|awk \'{print $2" "$5}\'| tr \"\n\" \":\"')
 	(status,storage) = commands.getstatusoutput("df -h |awk 'NR==2{print $5}'")
-	#(status,username) = commands.getstatusoutput('whoami')
-	(status,net) = commands.getstatusoutput("tail -n 1 /root/nettrafic.log|awk '{print $1,$4,$6}'")
-	if system.find('FreeBSD') != -1 :
-		(status,cpu) = commands.getstatusoutput("top -d 2 |grep CPU:|awk -F',' '{print $5}'")
-		(status,memory) = commands.getstatusoutput("top -d 1|grep Mem:|awk -F, '{print $6}'")
-		#(status,mac) = commands.getstatusoutput('ifconfig |grep ether|awk \'{print $2}\'')
-		(status,ip) = commands.getstatusoutput("ifconfig em0| egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | awk '{print $2,$4}'")
-		(ip,netmask)=ip.split()
-		print status,ip
-		print ip,netmask
-
-	elif system.find('Linux') != -1 :	
-		(status,cpu) = commands.getstatusoutput("top -bn1 |grep Cpu|grep -v grep|awk -F',' '{print $4\"%\"}'|sed 's/id//g'|sed 's/%%/%/g'|sed 's/ //g'")
-		#For ubuntu linux memory:
-		if system.find('Ubuntu') != -1 :
-			(status,memory) = commands.getstatusoutput("top -bn1|grep Mem|awk -F',' '{print $1,$3}'|sed 's/k//g'|awk '{printf \"%.1fM/%.1fM\\n\",$2/1024,$4/1024}'")
-		else :
-			(status,memory) = commands.getstatusoutput("top -bn1 |grep 'Mem'|grep -v grep|grep -v Swap|awk -F',' '{print $1,$2}'|awk '{printf \"%.1fM/%.1fM\\n\",$4/1024,$6/1024}'")
-		#
- 		(status,swap) = commands.getstatusoutput("top -bn1 |grep 'Swap'|grep -v grep|awk -F',' '{print $1,$2}'")
-		#(status,mac) = commands.getstatusoutput('ifconfig|grep HWaddr|awk \'{print $5}\'')
-		#example: take internal ip addr
-		(status,ip) = commands.getstatusoutput("/usr/sbin/ifconfig eth0| /usr/bin/egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | /usr/bin/awk '{print $2,$4}'|sed -e 's/addr://'")
-		(ip,netmask)=ip.split()
-		print status,ip
-		print ip,netmask
-		#netmask = tmpip[1].split(':')
-		#example: obtain external network IP addr
-		if ip.find('10.') !=-1  and  ip.find('192.168.') ==-1 and ip.find('172.16') ==-1 :
-			(status,ip) = commands.getstatusoutput('/usr/bin/curl  whatismyip.akamai.com')
-			if status != 0 :
-				(status,ip) = commands.getstatusoutput('/usr/bin/curl  whatismyip.akamai.com')
-			if status != 0 :
-				(status,ip) = commands.getstatusoutput('/usr/bin/wget -qO - ifconfig.co')			
-			ip =  ip.split('\n')[-1]
+	(status,net) = commands.getstatusoutput("tail -n 1 ./nettrafic.log|awk '{print $1,$4,$6}'")
+	(ip,netmask)=GetIp()
+	(status,system) = commands.getstatusoutput('uname -a')
+        if system.find('FreeBSD') != -1 :
+                (status,cpu) = commands.getstatusoutput("top -d 2 |grep CPU:|awk -F',' '{print $5}'")
+                (status,memory) = commands.getstatusoutput("top -d 1|grep Mem:|awk -F, '{print $6}'")
+        elif system.find('Linux') != -1 :
+                (status,cpu) = commands.getstatusoutput("top -bn1 |grep Cpu|grep -v grep|awk -F',' '{print $4\"%\"}'|sed 's/id//g'|sed 's/%%/%/g'|sed 's/ //g'")
+                #For ubuntu linux memory:
+                if system.find('Ubuntu') != -1 :
+                        (status,memory) = commands.getstatusoutput("top -bn1|grep Mem|awk -F',' '{print $1,$3}'|sed 's/k//g'|awk '{printf \"%.1fM/%.1fM\\n\",$2/1024,$4/1024}'")
+                else :
+                        (status,memory) = commands.getstatusoutput("top -bn1 |grep 'Mem'|grep -v grep|grep -v Swap|awk -F',' '{print $1,$2}'|awk '{printf \"%.1fM/%.1fM\\n\",$4/1024,$6/1024}'")
+                (status,swap) = commands.getstatusoutput("top -bn1 |grep 'Swap'|grep -v grep|awk -F',' '{print $1,$2}'")
 
 	the_page = '' 
 	def login2(self): 
@@ -142,7 +115,7 @@ class WebForm2():
 		self.the_page = response.read()
 		if serverip2 != '' :
 			print "server2 uploading..."			
-			req = urllib2.Request(self.url_login2, postdata) 
+			req = urllib2.Request(self.url_login, postdata) 
 			response = urllib2.urlopen(req)
 			self.the_page = response.read()		
 		#print self.the_page
@@ -156,38 +129,21 @@ class WebForm():
 	typename='baseinfo'
 	(status,hostname) = commands.getstatusoutput('hostname')
 	print status,hostname
-
 	(status,tz) = commands.getstatusoutput('tail -n 1 /etc/localtime')
-	(status,system) = commands.getstatusoutput('uname -ro')
 	(status,storage) = commands.getstatusoutput("df -h |grep '^/dev/'|awk '{print $2,$5}'| tr '\n' ':' ")
 	(status,username) = commands.getstatusoutput('whoami')
-	if system.find('FreeBSD') != -1 :
+	(status,system) = commands.getstatusoutput('uname -ro')
+	(ip,netmask)=GetIp()
+       	if system.find('FreeBSD') != -1 :
 		(status,cpu) = commands.getstatusoutput("dmesg|grep CPU:|awk '{print $2$3,$4,$6$7$8}'| tr '\n' ':'' ")
 		(status,memory) = commands.getstatusoutput("dmesg|grep 'real memory'|tr '=' ':'|awk '{print $1,$2$5$6}'")
 		(status,mac) = commands.getstatusoutput("ifconfig em0|grep ether|awk '{print $2}'")
-		(status,ip) = commands.getstatusoutput("ifconfig em0| egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | awk '{print $2,$4}'")
-		(ip,netmask)=ip.split()
-		print status,ip
-		print ip,netmask
-
 	elif system.find('Linux') != -1 :	
-		(status,cpu) = commands.getstatusoutput("cat /proc/cpuinfo |grep 'model name'|awk -F':' '{print $2}'| tr '\n' ':'")
+		(status,cpu) = commands.getstatusoutput("cat /proc/cpuinfo |grep 'model name'|awk -F':' '{print $2}'| uniq -c")
 		(status,memory) = commands.getstatusoutput('cat /proc/meminfo |grep MemTotal')
-		(status,mac) = commands.getstatusoutput("ifconfig eth0 |grep ether|awk '{print $2}'")
+		(status,mac) = commands.getstatusoutput("ifconfig "+ETH+" |grep ether|awk '{print $2}'")
 		#example: take internal ip addr
-		(status,ip) = commands.getstatusoutput("/usr/sbin/ifconfig eth0| /usr/bin/egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | /usr/bin/awk '{print $2,$4}'|sed -e 's/addr://'")
-		(ip,netmask)=ip.split()
-		print status,ip
-		print ip,netmask
-		#netmask = tmpip[1].split(':')
-		#example: obtain external network IP addr
-		if ip.find('10.') !=-1  and  ip.find('192.168.') ==-1 and ip.find('172.16') ==-1 :
-			(status,ip) = commands.getstatusoutput('/usr/bin/curl  whatismyip.akamai.com')
-			if status != 0 :
-				(status,ip) = commands.getstatusoutput('/usr/bin/curl  whatismyip.akamai.com')
-			if status != 0 :
-				(status,ip) = commands.getstatusoutput('/usr/bin/wget -qO - ifconfig.co')			
-			ip =  ip.split('\n')[-1]
+
 
 	the_page = '' 
 	def login(self): 
@@ -203,13 +159,15 @@ class WebForm():
 		'timezone' : self.tz,
 		'username' : self.username,
 		} 
+                print values
+                print self.url_login
 		postdata = urllib.urlencode(values) 
 		req = urllib2.Request(self.url_login, postdata) 
 		response = urllib2.urlopen(req)
 		self.the_page = response.read()
 		if serverip2 != "" :
 			print "server2 uploading..."			
-			req = urllib2.Request(self.url_login2, postdata) 
+			req = urllib2.Request(self.url_login, postdata) 
 			response = urllib2.urlopen(req)
 			self.the_page = response.read()		
 		#print self.the_page
