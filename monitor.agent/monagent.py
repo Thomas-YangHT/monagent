@@ -78,8 +78,11 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
 
         if method == 'GET':          
             str1   = src.split('?')
-            mess1  = str1[1].split('&')
-            tmp1   = mess1[0].split('=')
+            if len(str1)==1:
+                content = text_content
+            else    
+                mess1  = str1[1].split('&')
+                tmp1   = mess1[0].split('=')
             #下载 ssh 认证key
             if src == '/.ssh/id_rsa.pub?secid='+secid :
                 f1 = open('/root/.ssh/id_rsa.pub','rb')
