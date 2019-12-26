@@ -3,10 +3,10 @@ import sys,urllib,urllib2
 import  re
 
 secid='5toRb5lCdEU2q5H'
-serverip="139.198.6.146"
+serverip="192.168.10.92"
 serverip2=""
 port="18000"
-monroot="/root/monitor/"
+monroot="/home/xwx/monagent.client/"
 
 #download self's update
 class WebDownfile():

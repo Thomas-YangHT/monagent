@@ -1,11 +1,11 @@
 #while [ "1" ]
 #do
 eth=$1
-RXpre=$(cat /proc/net/dev | grep $eth | tr : " " | awk '{print $2}')
-TXpre=$(cat /proc/net/dev | grep $eth | tr : " " | awk '{print $10}')
+RXpre=$(cat /proc/net/dev | grep -w $eth: | tr : " " | awk '{print $2}')
+TXpre=$(cat /proc/net/dev | grep -w $eth: | tr : " " | awk '{print $10}')
 sleep 1
-RXnext=$(cat /proc/net/dev | grep $eth | tr : " " | awk '{print $2}')
-TXnext=$(cat /proc/net/dev | grep $eth | tr : " " | awk '{print $10}')
+RXnext=$(cat /proc/net/dev | grep -w $eth: | tr : " " | awk '{print $2}')
+TXnext=$(cat /proc/net/dev | grep -w $eth: | tr : " " | awk '{print $10}')
 #clear
 #echo  -e  "\t RX `date +%k:%M:%S` TX"
 RX=$((${RXnext}-${RXpre}))
