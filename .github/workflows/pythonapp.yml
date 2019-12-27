@@ -21,7 +21,7 @@ jobs:
         echo $MY_VAR  $REGIP/$PN
         cd $PN
         version=`date +%Y%m%d-%H%M%S`
-        docker build --no-cache -t $REGIP/$PN:v$version -f ./dockerfile.monagent .    
+        docker build --no-cache -t $REGIP/$PN:v$version -f ./dockerfile.alpine.python .    
         docker tag  $REGIP/$PN:v$version   $REGIP/$PN
         docker push $REGIP/$PN:v$version 
         docker push $REGIP/$PN
