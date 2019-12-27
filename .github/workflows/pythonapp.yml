@@ -1,0 +1,39 @@
+name: Test for actions runner baseed on python 2.7
+
+on: push
+
+jobs:
+  build:
+    name: My build
+    runs-on: [self-hosted, linux]
+    steps:
+    - name: checkout
+      uses: actions/checkout@master
+    - name: Test with pytest
+      run: |
+        py.test
+    - name: build
+      env:
+        MY_VAR: Hi, My name is YHT
+        REGIP:  "192.168.10.92:5000"
+        PN: monagent 
+      run: |
+        echo $MY_VAR  $REGIP  $PN
+        cd monagent.agent        
+        version=`date +%Y%m%d-%H%M%S`
+        docker build --no-cache -t 192.168.10.92:5000/monagent:v$version -f ./dockerfile.monagent .    
+        docker tag  192.168.10.92:5000/monagent:v$version   192.168.10.92:5000/flk_monagent
+        docker push 192.168.10.92:5000/monagent:v$version 
+        docker push 192.168.10.92:5000/monagent
+        sh ./docker-run.sh
+        kubectl set image deployment/monagent monagent=192.168.10.92:5000/monagent:v$version -n default
+      shell: bash
+    - name: failed
+      if: failure()
+      run: |
+        python sendmesstowx.py "build failed: https://github.com/Thomas-YangHT/monagent/new/master?filename=.github%2Fworkflows%2Fpythonapp.yml&workflow_template=pythonapp"
+    - name: successed
+      if: success()
+      run: |
+        python sendmesstowx.py "build successed"
+
