@@ -1,7 +1,7 @@
 #instmon.sh
 #in all server need to monitor:
 NETWORK=192.168.10
-ETH=`ip a|grep $NETWORK|awk '{print $7}'|grep -v "lo:"`
+ETH=`ip a|grep $NETWORK|sed 's/noprefixroute//g'|awk '{print $7}'|grep -v "lo:"|head -n 1`
 KEYname=xwx@k8host
 USER=`whoami`
 HOMEDIR=${HOME}/monagent.client
