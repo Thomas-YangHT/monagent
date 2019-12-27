@@ -8,9 +8,9 @@ serverip2=""
 port="18000"
 (status,who) = commands.getstatusoutput('whoami')
 if who=='root':
-	whodir = who
+	whodir = '/' + who
 else:
-	whodir = '/home'+who
+	whodir = '/home/' + who
 monroot = whodir + "/monagent.client/"
 
 #download self's update
