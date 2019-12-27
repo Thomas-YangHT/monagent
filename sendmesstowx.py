@@ -6,9 +6,16 @@ import ssl
 
 ssl._create_default_https_context = ssl._create_unverified_context 
 
-CorpID = "wx5b316e874036047e"
-Secret = "Fr8zfhkaQUGR1IOzi47IJ_WGx4J580WpNnCmX0KMSpoeGx4hF0JThPD0ImTV0v_w" 
+def readConf():
+    f = open('sendwx.conf','r')
+    content = f.read()
+    f.close() 
+    dic={}   
+    dic=json.loads(content)
+    return dic['CorpID'],dic['Secret']
+
 class wxmessage(): 
+	(CorpID,Secret) = readConf()
 	url_get ="https://qyapi.weixin.qq.com/cgi-bin/gettoken?corpid=" + CorpID + "&corpsecret=" + Secret
 	url_post ="https://qyapi.weixin.qq.com/cgi-bin/message/send?access_token="
 	the_page = ''
@@ -45,7 +52,7 @@ class wxmessage():
 if len(sys.argv) == 2:
     content = sys.argv[1]
 else:
-    f1 = open('/root/alarm','rb')
+    f1 = open('alarm','rb')
     content = f1.read()
     f1.close()    
 if content != None :
