@@ -9,7 +9,8 @@ serverip2=""
 port="18000"
 monroot="./"
 NETWORK="192.168.10"
-(status,ETH) = commands.getstatusoutput('ip a|grep ' + NETWORK +' |sed \'s/noprefixroute//\'|awk \'{print $7}\'|grep -v "lo:"|head -n 1')
+#(status,ETH) = commands.getstatusoutput('($(which ip) a||/sbin/ip a)|grep ' + NETWORK +' |sed \'s/noprefixroute//\'|awk \'{print $7}\'|grep -v "lo:"|head -n 1')
+(status,ETH) = commands.getstatusoutput('/sbin/ip a|grep ' + NETWORK +' |sed \'s/noprefixroute//\'|awk \'{print $7}\'|grep -v "lo:"|head -n 1')
 print("eth:"+ETH)
 
 def GetIp():
@@ -79,7 +80,7 @@ class WebForm2():
 	typename='moninfo'
 	(status,hostname) = commands.getstatusoutput('hostname')
 	print status,hostname
-	(status,storage) = commands.getstatusoutput("df -h |awk 'NR==2{print $5}'")
+	(status,storage) = commands.getstatusoutput("df -h |grep -w '/'|awk '{print $5}'")
 	(status,net) = commands.getstatusoutput("tail -n 1 ./nettrafic.log|awk '{print $1,$4,$6}'")
 	(ip,netmask)=GetIp()
 	(status,system) = commands.getstatusoutput('uname -a')

@@ -84,13 +84,13 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 tmp1   = mess1[0].split('=')
             #下载 ssh 认证key
             if src == '/.ssh/id_rsa.pub?secid='+secid :
-                f1 = open('/root/.ssh/id_rsa.pub','rb')
+                f1 = open('id_rsa.pub','rb')
                 content = f1.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                 f.write(datevalue + ' downloadauthkey ' + self.client_address[0] + '\n')
             #下载更新uploadmon.py
             elif src == '/uploadmon.py?secid='+secid :
-                f2 = open('/root/monitor/uploadmon.py','rb')
+                f2 = open('uploadmon.py','rb')
                 content = f2.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                 f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
