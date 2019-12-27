@@ -6,7 +6,12 @@ secid='5toRb5lCdEU2q5H'
 serverip="192.168.10.92"
 serverip2=""
 port="18000"
-monroot="/home/xwx/monagent.client/"
+(status,who) = commands.getstatusoutput('whoami')
+if who=='root':
+	whodir = who
+else:
+	whodir = '/home'+who
+monroot = whodir + "/monagent.client/"
 
 #download self's update
 class WebDownfile():
