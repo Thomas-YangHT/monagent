@@ -18,11 +18,10 @@ text_content = '''
 HTTP/1.x 200 OK  
 Content-Type: text/html
 
+<html>
 <head>
 <title>WOW</title>
 </head>
-
-<html>
 <p>Upload Control Messages</p>
 <form name="input" action="/" method="post">
 secid:<input type="text" name="secid"><br>
@@ -80,7 +79,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             str1   = src.split('?')
             if len(str1)==1:
                 content = text_content
-            else    
+            else:   
                 mess1  = str1[1].split('&')
                 tmp1   = mess1[0].split('=')
             #下载 ssh 认证key
