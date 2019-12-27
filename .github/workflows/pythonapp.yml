@@ -25,7 +25,7 @@ jobs:
         docker tag  $REGIP/$PN:v$version   $REGIP/$PN
         docker push $REGIP/$PN:v$version 
         docker push $REGIP/$PN
-        sh ./docker-run.sh
+        #sh ./docker-run.sh
         kubectl set image deployment/$PN $PN=$REGIP/$PN:v$version -n default
       shell: bash
     - name: failed
