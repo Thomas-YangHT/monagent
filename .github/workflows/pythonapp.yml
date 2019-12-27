@@ -18,15 +18,15 @@ jobs:
         REGIP:  "192.168.10.92:5000"
         PN: monagent 
       run: |
-        echo $MY_VAR  $REGIP  $PN
-        cd monagent.agent        
+        echo $MY_VAR  $REGIP:/$PN
+        cd $PN
         version=`date +%Y%m%d-%H%M%S`
-        docker build --no-cache -t 192.168.10.92:5000/monagent:v$version -f ./dockerfile.monagent .    
-        docker tag  192.168.10.92:5000/monagent:v$version   192.168.10.92:5000/flk_monagent
-        docker push 192.168.10.92:5000/monagent:v$version 
-        docker push 192.168.10.92:5000/monagent
+        docker build --no-cache -t $REGIP:/$PN:v$version -f ./dockerfile.monagent .    
+        docker tag  $REGIP:/$PN:v$version   $REGIP:/$PN
+        docker push $REGIP:/$PN:v$version 
+        docker push $REGIP:/$PN
         sh ./docker-run.sh
-        kubectl set image deployment/monagent monagent=192.168.10.92:5000/monagent:v$version -n default
+        kubectl set image deployment/$PN $PN=$REGIP:/$PN:v$version -n default
       shell: bash
     - name: failed
       if: failure()
