@@ -42,9 +42,12 @@ class wxmessage():
 		self.decode_page= json.loads(self.the_page) 
 		print self.decode_page
 
-f1 = open('/root/alarm','rb')
-content = f1.read()
-f1.close()
+if len(sys.argv) == 2:
+    content = sys.argv[1]
+else:
+    f1 = open('/root/alarm','rb')
+    content = f1.read()
+    f1.close()    
 if content != None :
 	wx = wxmessage()
 	wx.getwxtokey()
