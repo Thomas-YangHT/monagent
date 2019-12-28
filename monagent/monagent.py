@@ -15,8 +15,9 @@ HOST = ''
 PORT = 18000
 
 text_content = '''
-HTTP/1.x 200 OK  
-Content-Type: text/html
+GET /OK HTTP/1.1
+Status: 200 OK  
+Content-Type: text/html; charset=utf-8
 
 <html>
 <head>
