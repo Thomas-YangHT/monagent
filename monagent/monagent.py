@@ -15,11 +15,10 @@ HOST = ''
 PORT = 18000
 
 text_content = '''
-HTTP/1.x 200 OK  
-Content-Type: text/html
-
-<html>
+<!DOCTYPE html>
+<html><!--STATUS OK-->
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>WOW</title>
 </head>
 <p>Upload Control Messages</p>
