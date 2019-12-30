@@ -9,7 +9,7 @@ serverip2=""
 port="18000"
 monroot="./"
 NETWORK="192.168.10"
-(status,ETH) = commands.getstatusoutput('ip a|grep ' + NETWORK +' |sed \'s/noprefixroute//\'|awk \'{print $7}\'|grep -v "lo:"|head -n 1')
+(status,ETH) = commands.getstatusoutput('/sbin/ip a|grep ' + NETWORK +' |sed \'s/noprefixroute//\'|awk \'{print $7}\'|grep -v "lo:"|head -n 1')
 print("eth:"+ETH)
 
 def GetIp():
@@ -22,7 +22,7 @@ def GetIp():
 		print ip,netmask
 	elif system.find('Linux') != -1 :	
 		#example: take internal ip addr
-		(status,ip) = commands.getstatusoutput("ifconfig "+ETH+"| egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | awk '{print $2,$4}'|sed -e 's/addr://' -e 's/Mask://'")
+		(status,ip) = commands.getstatusoutput("/sbin/ifconfig "+ETH+"| egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | awk '{print $2,$4}'|sed -e 's/addr://' -e 's/Mask://'")
 		(ip,netmask)=ip.split()
 		print status,ip
 		print ip,netmask

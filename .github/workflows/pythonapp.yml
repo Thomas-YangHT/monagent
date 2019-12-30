@@ -26,7 +26,7 @@ jobs:
         docker push $REGIP/$PN:v$version 
         docker push $REGIP/$PN
         #sh ./docker-run.sh
-        kubectl set image deployment/$PN $PN=$REGIP/$PN:v$version -n default
+        kubectl --kubeconfig /root/.kube/config set image deployment/$PN $PN=$REGIP/$PN:v$version -n default
       shell: bash
     - name: failed
       if: failure()
