@@ -1,10 +1,11 @@
 #Modify $MYHOME  with your mysql data directory
-$MYHOME=/root/cmp_mysql/mysql/
+MYHOME=/root/cmp_mysql/mysql/
+DNS=223.5.5.5
 
 docker rm -f moncenter
 docker run --name moncenter \
 --restart=always \
---dns=192.168.100.1 \
+--dns=$DNS \
 -e TZ='Asia/Shanghai' \
 -v $MYHOME:/info/  \
 -v $PWD/rootcron:/etc/crontabs/root \
