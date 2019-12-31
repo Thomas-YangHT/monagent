@@ -45,7 +45,7 @@ class WebForm3():
 	typename='portinfo'
 	(status,hostname) = commands.getstatusoutput('hostname')
 	print status,hostname
-	(status,ports)    = commands.getstatusoutput("netstat -anp|grep LISTEN|grep -v unix|sed -e 's/:::/:/g'|awk '{print $4\",\"$7}'|awk -F':' '{print $2}'|sed -e 's/\\.\\///g' -e 's/\\//,/g'|sort |uniq|awk -F',' '{printf \"%s:%s;\",$1,$3}'")
+	(status,ports)    = commands.getstatusoutput("sudo netstat -anp|grep LISTEN|grep -v unix|sed -e 's/:::/:/g'|awk '{print $4\",\"$7}'|awk -F':' '{print $2}'|sed -e 's/\\.\\///g' -e 's/\\//,/g'|sort |uniq|awk -F',' '{printf \"%s:%s;\",$1,$3}'")
 	(ip,netmask)=GetIp()
 	
 	the_page = '' 
