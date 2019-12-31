@@ -1,3 +1,5 @@
+#Download  info  from monagent, and save to mysqlDB
+#Must be run with mysql at the same host, required by "LOAD DATA INFILE...".
 import commands
 import MySQLdb
 import sys,urllib,urllib2
@@ -6,11 +8,11 @@ secid='5toRb5lCdEU2q5H'
 serverip="192.168.10.92"
 serverip2=""
 port="18000"
-monroot="./info"                            #mysql server think's directory
+monroot="./info"             #the directory of mysql server think
+MYHOME='/info/'              #the directory of docker mounted host's mysql data/info, used for sql "LOAD DATA INFILE..."
 MYHOST="192.168.100.71"
 MYUSER="yanght"
 MYPWD="yanght"
-MYHOME='/export/opt/cmp_mysql2/mysql/info/'  #Host access directory
 f = open('./server8000.log','a')
 
 #download baseinfo
