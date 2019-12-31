@@ -1,5 +1,5 @@
 #Modify $MYHOME  with your mysql data directory
-MYHOME=/root/cmp_mysql/mysql/
+MYHOME=/root/cmp_mysql/mysql/info/
 DNS=223.5.5.5
 
 docker rm -f moncenter
