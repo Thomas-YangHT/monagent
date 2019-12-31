@@ -181,12 +181,12 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 print key,dicmess[key]
             #上传服务器基础信息
             if dicmess['secid'] == secid and dicmess['type'] == 'baseinfo' :
-                self.request.sendall(text_content + '\n <p>' + dicmess['hostname'] + dicmess['ip'] + dicmess['system'] + dicmess['cpu'] +dicmess['memory'] + dicmess['storage'] + dicmess['timezone'] + dicmess['username'] + '</p>')
+                self.request.sendall(text_content + '\n <p>' + dicmess['hostname'] + dicmess['ip'] + dicmess['system'] + dicmess['cpu'] +dicmess['memory'] + dicmess['storage'] + dicmess['timezone'] + dicmess['username'] + dicmess['mac'] + '</p>')
                 (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                 (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/baseinfo ];then touch /root/log/baseinfo; fi')
                 (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/baseinfo\`;if [ ! -n "${trueth}" ]; then sed -i \'\' /'+dicmess['ip']+'/d /root/log/baseinfo; fi')
                 f3 = open('/root/log/baseinfo','a')
-                content= dicmess['hostname'] +','+ dicmess['ip'] +','+ dicmess['system'] +','+ dicmess['cpu'] +','+dicmess['memory'] +','+ dicmess['storage'] +','+ dicmess['timezone'] +','+ dicmess['username'] 
+                content= dicmess['hostname'] +','+ dicmess['ip'] +','+ dicmess['system'] +','+ dicmess['cpu'] +','+dicmess['memory'] +','+ dicmess['storage'] +','+ dicmess['timezone'] +','+ dicmess['username'] +','+ dicmess['mac'] 
                 f3.write(content + '\n')
             #上传监控信息
             elif dicmess['secid'] == secid and dicmess['type'] == 'moninfo' :
