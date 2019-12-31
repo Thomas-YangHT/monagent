@@ -14,8 +14,10 @@ sys.setdefaultencoding('utf-8')
 HOST = ''
 PORT = 18000
 
-text_content = '''Status: OK - 200
+text_content = '''HTTP/1.1 200 OK
 Content-Type:application/xml
+Server: myserver
+Connection: keep-alive
 
 <!doctype html> 
 <html>
