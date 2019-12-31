@@ -27,6 +27,9 @@ jobs:
         docker push $REGIP/$PN
         #sh ./docker-run.sh
         kubectl --kubeconfig /root/.kube/config set image deployment/$PN $PN=$REGIP/$PN:v$version -n default
+        cd ../moncenter
+        docker build --no-cache -t moncenter -f ./dockerfile.alpine.monagent.center .
+        sh docker-run.sh
       shell: bash
     - name: failed
       if: failure()
