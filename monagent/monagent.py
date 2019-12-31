@@ -19,12 +19,13 @@ Date: Sun, 01 Jun 2008 12:35:47 GMT
 Server: Apache/2.0.61 (Unix)
 Last-Modified:Sun, 01 Jun 2008 12:35:30 GMT
 Accept-Ranges:bytes
-Content-Length:18616
+Content-Length:2000
 Cache-Control:max-age=120
 Expires:Sun, 01 Jun 2008 12:37:47 GMT
 Content-Type:application/xml
 Age:2
 Connection:close
+
 <!doctype html> 
 <html>
 <head>
