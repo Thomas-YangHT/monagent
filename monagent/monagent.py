@@ -19,10 +19,9 @@ Content-Type:text/html
 Server: myserver
 Connection: keep-alive
 
-
 <html>
 <head>
-<title>WOW</title>
+<title>OK</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
 <p>Upload Control Messages</p>
