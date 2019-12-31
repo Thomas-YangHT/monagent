@@ -141,7 +141,7 @@ class WebForm():
 	elif system.find('Linux') != -1 :	
 		(status,cpu) = commands.getstatusoutput("cat /proc/cpuinfo |grep 'model name'|awk -F':' '{print $2}'| uniq -c")
 		(status,memory) = commands.getstatusoutput('cat /proc/meminfo |grep MemTotal')
-		(status,mac) = commands.getstatusoutput("ifconfig "+ETH+" |grep ether|awk '{print $2}'")
+		(status,mac) = commands.getstatusoutput("(ifconfig "+ETH+" |grep ether||ifconfig "+ETH+" |grep HWaddr)|grep -Po '..:..:..:..:..:..'")
 		#example: take internal ip addr
 
 
