@@ -19,7 +19,7 @@ Content-Type:application/xml
 Server: myserver
 Connection: keep-alive
 
-<!doctype html> 
+
 <html>
 <head>
 <title>WOW</title>
