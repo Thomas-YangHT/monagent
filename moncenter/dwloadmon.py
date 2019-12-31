@@ -39,7 +39,7 @@ class WebDownfile():
 			sql=("delete from cmdb.basetmp")
 			print sql
 			count=cur.execute(sql)
-			sql=("LOAD DATA INFILE '"+monroot+"/baseinfo'  INTO TABLE basetmp  CHARACTER SET utf8  FIELDS TERMINATED BY ',' (`hostname`, `ip`, `system`, `cpu`, `mem`, `storage`, `timezone`,`username`);")
+			sql=("LOAD DATA INFILE '"+monroot+"/baseinfo'  INTO TABLE basetmp  CHARACTER SET utf8  FIELDS TERMINATED BY ',' (`hostname`, `ip`, `system`, `cpu`, `mem`, `storage`, `timezone`,`username`,`mac`);")
 			print sql
 			count=cur.execute(sql)
 			sql=("insert into base(`hostname`, `ip`, `username`, `cpu`, `mem`, `storage`, `system`, `timezone`)  select  `hostname`, `ip`, `username`, `cpu`, `mem`, `storage`, `system`, `timezone` from basetmp where ip not in (select ip from base)")
