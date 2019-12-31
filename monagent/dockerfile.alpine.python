@@ -5,7 +5,8 @@ RUN  uname -a && \
 echo  'http://mirrors.tuna.tsinghua.edu.cn/alpine/v3.10/main'> /etc/apk/repositories && \
 echo  'http://mirrors.tuna.tsinghua.edu.cn/alpine/v3.10/community' >>/etc/apk/repositories && \
 cat /etc/apk/repositories && \
-apk add  py2-urllib3
+apk add  py2-urllib3 tzdata && \
+cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 #apk add  --no-cache nginx uwsgi uwsgi-python py-flask py-mysqlclient
 COPY . /monagent
 WORKDIR /monagent
