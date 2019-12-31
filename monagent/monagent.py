@@ -15,7 +15,7 @@ HOST = ''
 PORT = 18000
 
 text_content = '''HTTP/1.1 200 OK
-Content-Type:application/xml
+Content-Type:text/html
 Server: myserver
 Connection: keep-alive
 
