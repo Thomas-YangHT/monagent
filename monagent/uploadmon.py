@@ -80,7 +80,7 @@ class WebForm2():
 	(status,hostname) = commands.getstatusoutput('hostname')
 	print status,hostname
 	(status,storage) = commands.getstatusoutput("df -h |grep -w '/'|awk '{print $5}'")
-	(status,net) = commands.getstatusoutput("cd /root/monagent.client && tail -n 1 ./nettrafic.log|awk '{print $1,$4,$6}'")
+	(status,net) = commands.getstatusoutput("cd /$HOME/monagent.client && tail -n 1 ./nettrafic.log|awk '{print $1,$4,$6}'")
 	(ip,netmask)=GetIp()
 	(status,system) = commands.getstatusoutput('uname -a')
         if system.find('FreeBSD') != -1 :
