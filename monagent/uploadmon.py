@@ -48,6 +48,7 @@ def Memory(system):
 
 def Mac(system):
 	mac=''
+	ETH=Eth()
 	if system.find('FreeBSD') != -1 :
 		(status,mac) = commands.getstatusoutput("ifconfig em0|grep ether|awk '{print $2}'")
 	elif system.find('Linux') != -1 :	
@@ -302,12 +303,12 @@ if len(sys.argv) == 2:
 		web=PortInfo()
 		web.Upload()	
 	if sys.argv[1] == 'downkey':
-		downloadfile = DownKey()
-		downloadfile.downfile()
+		dw = DownKey()
+		dw.downfile()
 	if sys.argv[1] == 'dwselfinfo':
-		downresource = AutoBackup()
-		downresource.download()	
+		dw = AutoBackup()
+		dw.download()	
 	if sys.argv[1] == 'selfupdate':
-		downloadfile = DownKey2()
-		downloadfile.downfile2()
+		dw = DownKey2()
+		dw.downfile2()
 else: print help
