@@ -24,7 +24,7 @@ def Hostname():
 
 def UserName():
 	(status,username) = commands.getstatusoutput('whoami')
-	return UserName
+	return username
 
 def Storage():
 	(status,storage) = commands.getstatusoutput("df -h |grep '^/dev/'|awk '{print $2,$5}'| tr '\n' ':' ")
@@ -176,9 +176,9 @@ class MonInfo():
 		'type'  : self.typename,
 		'hostname' : self.hostname, 
 		'ip' : self.ip, 
-		'cpuidle' : self.cpuidle,
-		'memused' : self.memused,
-		'rootusage' : self.rootusage,
+		'cpu' : self.cpuidle,
+		'memory' : self.memused,
+		'storage' : self.rootusage,
 		'net' : self.net,
 		} 
 		print values
