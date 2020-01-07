@@ -16,6 +16,15 @@ def readConf():
     dicconf={}   
     dicconf=json.loads(content)
     return dicconf
+dicconf={}
+dicconf=readConf()
+secid=dicconf['secid']
+serverip=dicconf['serverip']
+serverip2=dicconf['serverip2']
+port=dicconf['port']
+MYHOST=dicconf['MYHOST']
+MYUSER=dicconf['MYUSER']
+MYPWD=dicconf['MYPWD']
 
 #download baseinfo
 class WebDownfile():
@@ -186,15 +195,7 @@ help='''
 3. python stepone_reghost.py dwportinfo	 ----download recently portinfo;
 4. python stepone_reghost.py dwbakinfo	 ----download recently bakinfo;
 '''
-dicconf={}
-dicconf=readConf()
-secid=dicconf['secid']
-serverip=dicconf['serverip']
-serverip2=dicconf['serverip2']
-port=dicconf['port']
-MYHOST=dicconf['MYHOST']
-MYUSER=dicconf['MYUSER']
-MYPWD=dicconf['MYPWD']
+
 if len(sys.argv) == 2:
 	if sys.argv[1] == 'dwbaseinfo':
 		downloadfile = WebDownfile()
