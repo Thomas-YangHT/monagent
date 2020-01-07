@@ -1,19 +1,21 @@
 #Download  info  from monagent, and save to mysqlDB
-#Must be run with mysql at the same host, required by "LOAD DATA INFILE...".
+import json
 import commands
 import MySQLdb
 import sys,urllib,urllib2
 #modify these item to suit your monitor system:
-secid='5toRb5lCdEU2q5H'
-serverip="192.168.10.92"
-serverip2=""
-port="18000"
-monroot="./info"             #the directory of mysql server think
-MYHOME='/info/'              #the directory of docker mounted host's mysql data/info, used for sql "LOAD DATA INFILE..."
-MYHOST="192.168.10.92"
-MYUSER="yanght"
-MYPWD="yanght"
+
+monroot="."             #the directory of mysql server think
+MYHOME='./'             #the directory used for sql "LOAD DATA LOCAL INFILE...", modified as .  no need mount 
 f = open('./server8000.log','a')
+
+def readConf():
+    f = open('monitor.conf','r')
+    content = f.read()
+    f.close() 
+    dicconf={}   
+    dicconf=json.loads(content)
+    return dicconf
 
 #download baseinfo
 class WebDownfile():
@@ -41,7 +43,7 @@ class WebDownfile():
 			sql=("delete from cmdb.basetmp")
 			print sql
 			count=cur.execute(sql)
-			sql=("LOAD DATA INFILE '"+monroot+"/baseinfo'  INTO TABLE basetmp  CHARACTER SET utf8  FIELDS TERMINATED BY ',' (`hostname`, `ip`, `system`, `cpu`, `mem`, `storage`, `timezone`,`username`,`mac`);")
+			sql=("LOAD DATA LOCAL INFILE '"+monroot+"/baseinfo'  INTO TABLE basetmp  CHARACTER SET utf8  FIELDS TERMINATED BY ',' (`hostname`, `ip`, `system`, `cpu`, `mem`, `storage`, `timezone`,`username`,`mac`);")
 			print sql
 			count=cur.execute(sql)
 			sql=("insert into base(`hostname`, `ip`, `username`, `cpu`, `mem`, `storage`, `system`, `timezone`)  select  `hostname`, `ip`, `username`, `cpu`, `mem`, `storage`, `system`, `timezone` from basetmp where ip not in (select ip from base)")
@@ -85,12 +87,9 @@ class WebDownfile2():
 		   		print sql
 				count=cur.execute(sql)			
 			  	#sql=("LOAD DATA LOW_PRIORITY LOCAL INFILE '/root/moninfo' REPLACE INTO TABLE `moninfo`.`moninfo` FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
-				sql=("LOAD DATA INFILE '"+monroot+"/moninfo' INTO TABLE `moninfo` FIELDS TERMINATED BY ','  (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
+				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/moninfo' INTO TABLE `moninfo` FIELDS TERMINATED BY ','  (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
 				print sql
 				count=cur.execute(sql)
-				#sql=("LOAD DATA INFILE '/root/moninfo' INTO TABLE `moninfohis` FIELDS TERMINATED BY ',' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
-				#print sql
-				#count=cur.execute(sql)
 				(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
 			   	f.write(datevalue + " loaddata from "+monroot+"/moninfo\n")
 				conn.commit()
@@ -129,12 +128,9 @@ class WebDownfile3():
 		   		print sql
 				count=cur.execute(sql)			
 			  	#sql=("LOAD DATA LOW_PRIORITY LOCAL INFILE '/root/moninfo' REPLACE INTO TABLE `moninfo`.`moninfo` FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
-				sql=("LOAD DATA INFILE '"+monroot+"/portinfo' INTO TABLE `portinfo` FIELDS TERMINATED BY ','  (`date`, `hostname`, `ip`, `port`);")
+				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/portinfo' INTO TABLE `portinfo` FIELDS TERMINATED BY ','  (`date`, `hostname`, `ip`, `port`);")
 				print sql
 				count=cur.execute(sql)
-				#sql=("LOAD DATA INFILE '/root/portinfo' INTO TABLE `portinfohis` FIELDS TERMINATED BY ',' (`date`, `hostname`, `ip`, `port`);")
-				#print sql
-				#count=cur.execute(sql)
 				(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
 			   	f.write(datevalue + " loaddata from "+monroot+"/portinfo\n")
 				conn.commit()
@@ -173,12 +169,9 @@ class WebDownfile4():
 		   		print sql
 				count=cur.execute(sql)			
 			  	#sql=("LOAD DATA LOW_PRIORITY LOCAL INFILE '/root/moninfo' REPLACE INTO TABLE `moninfo`.`moninfo` FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
-				sql=("LOAD DATA INFILE '"+monroot+"/bakinfo' INTO TABLE `bakinfo` FIELDS TERMINATED BY ','  (`date`, `ip`, `filename`, `count`,`space`);")
+				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/bakinfo' INTO TABLE `bakinfo` FIELDS TERMINATED BY ','  (`date`, `ip`, `filename`, `count`,`space`);")
 				print sql
 				count=cur.execute(sql)
-				#sql=("LOAD DATA INFILE '"+monroot+"/bakinfo' INTO TABLE `bakinfohis` FIELDS TERMINATED BY ',' (`date`, `ip`, `filename`, `count`,`space`);")
-				#print sql
-				#count=cur.execute(sql)
 				(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
 			   	f.write(datevalue + " loaddata from "+monroot+"/bakinfo\n")
 				conn.commit()
@@ -193,6 +186,15 @@ help='''
 3. python stepone_reghost.py dwportinfo	 ----download recently portinfo;
 4. python stepone_reghost.py dwbakinfo	 ----download recently bakinfo;
 '''
+dicconf={}
+dicconf=readConf()
+secid=dicconf['secid']
+serverip=dicconf['serverip']
+serverip2=dicconf['serverip2']
+port=dicconf['port']
+MYHOST=dicconf['MYHOST']
+MYUSER=dicconf['MYUSER']
+MYPWD=dicconf['MYPWD']
 if len(sys.argv) == 2:
 	if sys.argv[1] == 'dwbaseinfo':
 		downloadfile = WebDownfile()
