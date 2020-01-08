@@ -123,7 +123,7 @@ def MemUsed(system):
 	return memory
 
 def BaseInfo():
-	(status,baseinfo) = commands.getstatusoutput("bash collexec.sh baseinfo")
+	(status,baseinfo) = commands.getstatusoutput("bash collexec.sh baseinfo 2>>upload.err")
 	return baseinfo
 
 #upload portinfo (self's port process message)
