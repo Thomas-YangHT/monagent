@@ -8,6 +8,8 @@ serverip2=""
 port="18000"
 monroot="./"
 NETWORK="192.168.10"
+ExecDir='monagent.client'
+
 #(status,ETH) = commands.getstatusoutput('/sbin/ip a|grep ' + NETWORK +' |sed \'s/noprefixroute//\'|awk \'{print $7}\'|grep -v "lo:"|head -n 1')
 #print("eth:"+ETH)
 def Sys():
@@ -121,7 +123,7 @@ def MemUsed(system):
 		(status,memory) = commands.getstatusoutput("top -bn1 |grep 'Mem'|grep -v grep|grep -v Swap|awk -F',' '{print $1,$2}'|awk '{printf \"%.1fM/%.1fM\\n\",$4/1024,$6/1024}'")
 		(status,swap) = commands.getstatusoutput("top -bn1 |grep 'Swap'|grep -v grep|awk -F',' '{print $1,$2}'")
 	return memory
-ExecDir='monagent.client'
+
 def BaseInfo():
 	(status,baseinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh baseinfo 2>>upload.err")
 	return baseinfo
