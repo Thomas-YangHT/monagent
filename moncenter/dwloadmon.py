@@ -27,7 +27,7 @@ MYUSER=dicconf['MYUSER']
 MYPWD=dicconf['MYPWD']
 
 #download baseinfo
-class WebDownfile():
+class BaseInfo():
 	url_down="http://"+serverip+":"+port+"/dwbaseinfo?secid="+secid
 	url_down2="http://"+serverip2+":"+port+"/dwbaseinfo?secid="+secid
 	the_page=''
@@ -52,10 +52,10 @@ class WebDownfile():
 			sql=("delete from cmdb.basetmp")
 			print sql
 			count=cur.execute(sql)
-			sql=("LOAD DATA LOCAL INFILE '"+monroot+"/baseinfo'  INTO TABLE basetmp  CHARACTER SET utf8  FIELDS TERMINATED BY ',' (`hostname`, `ip`, `system`, `cpu`, `mem`, `storage`, `timezone`,`username`,`mac`);")
+			sql=("LOAD DATA LOCAL INFILE '"+monroot+"/baseinfo'  INTO TABLE basetmp  CHARACTER SET utf8  FIELDS TERMINATED BY ',' (`hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, `seriesno`);")
 			print sql
 			count=cur.execute(sql)
-			sql=("insert into base(`hostname`, `ip`, `username`, `cpu`, `mem`, `storage`, `system`, `timezone`)  select  `hostname`, `ip`, `username`, `cpu`, `mem`, `storage`, `system`, `timezone` from basetmp where ip not in (select ip from base)")
+			sql=("insert into monitor.baseinfo(`hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, 'seriesno')  select  `hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, `seriesno` from basetmp where ip not in (select ip from monitor.baseinfo)")
 			print sql
 			count=cur.execute(sql)			 
 			(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
@@ -198,15 +198,15 @@ help='''
 
 if len(sys.argv) == 2:
 	if sys.argv[1] == 'dwbaseinfo':
-		downloadfile = WebDownfile()
-		downloadfile.downfile()
+		dw = BaseInfo()
+		dw.downfile()
 	if sys.argv[1] == 'dwmoninfo':
-		downloadfile = WebDownfile2()
-		downloadfile.downfile2()
+		dw = WebDownfile2()
+		dw.downfile2()
 	if sys.argv[1] == 'dwportinfo':
-		downloadfile = WebDownfile3()
-		downloadfile.downfile3()
+		dw = WebDownfile3()
+		dw.downfile3()
 	if sys.argv[1] == 'dwbakinfo':
-		downloadfile = WebDownfile4()
-		downloadfile.downfile4()
+		dw = WebDownfile4()
+		dw.downfile4()
 else: print help

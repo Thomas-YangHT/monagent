@@ -126,6 +126,22 @@ def BaseInfo():
 	(status,baseinfo) = commands.getstatusoutput("bash collexec.sh baseinfo 2>>upload.err")
 	return baseinfo
 
+def MonInfo():
+	(status,moninfo) = commands.getstatusoutput("bash collexec.sh moninfo 2>>upload.err")
+	return moninfo
+
+def PortInfo():
+	(status,portinfo) = commands.getstatusoutput("bash collexec.sh portsinfo 2>>upload.err")
+	return portinfo
+
+def BakInfo():
+	(status,bakinfo) = commands.getstatusoutput("bash collexec.sh bakinfo 2>>upload.err")
+	return bakinfo
+
+def ErrInfo():
+	(status,errinfo) = commands.getstatusoutput("bash collexec.sh errinfo 2>>upload.err")
+	return errinfo
+
 #upload portinfo (self's port process message)
 class PortInfo(): 
 	url_Upload="http://"+serverip+":"+port 
@@ -298,4 +314,5 @@ if len(sys.argv) == 2:
 	if sys.argv[1] == 'selfupdate':
 		dw = DownKey2()
 		dw.downfile2()
+	else: print help
 else: print help
