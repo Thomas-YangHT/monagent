@@ -121,25 +121,25 @@ def MemUsed(system):
 		(status,memory) = commands.getstatusoutput("top -bn1 |grep 'Mem'|grep -v grep|grep -v Swap|awk -F',' '{print $1,$2}'|awk '{printf \"%.1fM/%.1fM\\n\",$4/1024,$6/1024}'")
 		(status,swap) = commands.getstatusoutput("top -bn1 |grep 'Swap'|grep -v grep|awk -F',' '{print $1,$2}'")
 	return memory
-
+ExecDir='monagent.client'
 def BaseInfo():
-	(status,baseinfo) = commands.getstatusoutput("bash collexec.sh baseinfo 2>>upload.err")
+	(status,baseinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh baseinfo 2>>upload.err")
 	return baseinfo
 
 def MonInfo():
-	(status,moninfo) = commands.getstatusoutput("bash collexec.sh moninfo 2>>upload.err")
+	(status,moninfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh moninfo 2>>upload.err")
 	return moninfo
 
 def PortInfo():
-	(status,portinfo) = commands.getstatusoutput("bash collexec.sh portsinfo 2>>upload.err")
+	(status,portinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh portsinfo 2>>upload.err")
 	return portinfo
 
 def BakInfo():
-	(status,bakinfo) = commands.getstatusoutput("bash collexec.sh bakinfo 2>>upload.err")
+	(status,bakinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh bakinfo 2>>upload.err")
 	return bakinfo
 
 def ErrInfo():
-	(status,errinfo) = commands.getstatusoutput("bash collexec.sh errinfo 2>>upload.err")
+	(status,errinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh errinfo 2>>upload.err")
 	return errinfo
 
 #upload portinfo (self's port process message)

@@ -51,6 +51,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         #timeout = 2
         buf=''
         i=0
+        print '--------------'
         while  buf.find('exit') == -1 or len(buf)==1440 and i==1:
             buf = self.request.recv(2048)
             request += buf
@@ -64,12 +65,10 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         #        break
         #request = self.request.recv(1024)
         f = open('/root/server8000.log','a')
-
         print 'Connected by',self.client_address[0]
         (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
         f.write(datevalue + ' Connected by ' + self.client_address[0] + '\n')
         print 'Request is', len(request),request
-        print '--------------'
 
         tmp  	   = request.split(' ')
         method     = tmp[0]
