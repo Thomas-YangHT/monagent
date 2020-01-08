@@ -46,13 +46,13 @@ class BaseInfo():
 		f1.write(self.the_page)
 		f1.close()
 		try:
-			conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='cmdb',port=3306,charset='utf8')
+			conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='monitor',port=3306,charset='utf8')
 			cur=conn.cursor()
 			#sql=("LOAD DATA LOW_PRIORITY INFILE '/root/baseinfo' REPLACE INTO TABLE `cmdb`.`basetmp` CHARACTER SET gbk FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`hostname`, `ip`, `username`, `cpu`, `mem`, `storage`, `system`, `timezone`);")
-			sql=("delete from cmdb.basetmp")
+			sql=("delete from monitor.basetmp")
 			print sql
 			count=cur.execute(sql)
-			sql=("LOAD DATA LOCAL INFILE '"+monroot+"/baseinfo'  INTO TABLE basetmp  CHARACTER SET utf8  FIELDS TERMINATED BY ',' (`hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, `seriesno`);")
+			sql=("LOAD DATA LOCAL INFILE '"+monroot+"/baseinfo'  INTO TABLE monitor.basetmp  CHARACTER SET utf8  FIELDS TERMINATED BY ',' (`hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, `seriesno`);")
 			print sql
 			count=cur.execute(sql)
 			sql=("insert into monitor.baseinfo(`hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, 'seriesno')  select  `hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, `seriesno` from basetmp where ip not in (select ip from monitor.baseinfo)")
@@ -197,7 +197,7 @@ help='''
 '''
 
 if len(sys.argv) == 2:
-	elif sys.argv[1] == 'dwbaseinfo':
+	if sys.argv[1] == 'dwbaseinfo':
 		dw = BaseInfo()
 		dw.downfile()
 	elif sys.argv[1] == 'dwmoninfo':
