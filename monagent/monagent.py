@@ -186,7 +186,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/baseinfo ];then touch /root/log/baseinfo; fi')
                 (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/baseinfo\`;if [ ! -n "${trueth}" ]; then sed -i \'\' /'+dicmess['ip']+'/d /root/log/baseinfo; fi')
                 f3 = open('/root/log/baseinfo','a')
-                content= dicmess['baseinfo']
+                content = dicmess['baseinfo']
                 f3.write(content + '\n')
             #上传监控信息
             elif dicmess['secid'] == secid and dicmess['type'] == 'moninfo' :
