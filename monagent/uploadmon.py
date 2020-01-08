@@ -183,25 +183,16 @@ class MonInfo():
 		url_Upload="http://"+serverip2+":"+port	 
 	secidd=secid
 	typename='moninfo'
-	system=''
-	system=Sys()
-	hostname=Hostname()
-	(ip,netmask)=GetIp()
-	cpuidle=CpuIdle(system)
-	memused=MemUsed(system)
-	rootusage=RootUsage()
-	net=Net()
+	moninfo=MonInfo()
+	#TIMESTAMP, IP, CPUIDLE, MEMTOTAL, MEMUSED, RX, TX, DISKROOTUSAGE, IOAWAIT, IOUTIL
+	ip=moninfo.split(',')[1]
 	the_page = '' 
 	def Upload(self): 
 		values = {
 		'secid' : self.secidd,
 		'type'  : self.typename,
-		'hostname' : self.hostname, 
-		'ip' : self.ip, 
-		'cpu' : self.cpuidle,
-		'memory' : self.memused,
-		'storage' : self.rootusage,
-		'net' : self.net,
+		'moninfo' : self.moninfo,
+		'ip' : self.ip,
 		} 
 		print values
 		print self.url_Upload

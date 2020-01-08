@@ -67,7 +67,7 @@ class BaseInfo():
 			print "Mysql Error %d: %s" % (e.args[0], e.args[1])
 
 #download moninfo
-class WebDownfile2():
+class MonInfo():
 	url_down="http://"+serverip+":"+port+"/dwmoninfo?secid="+secid
 	url_down2="http://"+serverip2+":"+port+"/dwmoninfo?secid="+secid
 	the_page=''
@@ -201,7 +201,7 @@ if len(sys.argv) == 2:
 		dw = BaseInfo()
 		dw.downfile()
 	elif sys.argv[1] == 'dwmoninfo':
-		dw = WebDownfile2()
+		dw = Moninfo()
 		dw.downfile2()
 	elif sys.argv[1] == 'dwportinfo':
 		dw = WebDownfile3()
