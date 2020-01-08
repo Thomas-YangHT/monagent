@@ -8,7 +8,7 @@ serverip2=""
 port="18000"
 monroot="./"
 NETWORK="192.168.10"
-ExecDir='~/monagent.client/'
+ExecDir='~/monagent.client'
 
 #(status,ETH) = commands.getstatusoutput('/sbin/ip a|grep ' + NETWORK +' |sed \'s/noprefixroute//\'|awk \'{print $7}\'|grep -v "lo:"|head -n 1')
 #print("eth:"+ETH)
