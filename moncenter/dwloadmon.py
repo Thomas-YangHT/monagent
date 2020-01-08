@@ -197,16 +197,17 @@ help='''
 '''
 
 if len(sys.argv) == 2:
-	if sys.argv[1] == 'dwbaseinfo':
+	elif sys.argv[1] == 'dwbaseinfo':
 		dw = BaseInfo()
 		dw.downfile()
-	if sys.argv[1] == 'dwmoninfo':
+	elif sys.argv[1] == 'dwmoninfo':
 		dw = WebDownfile2()
 		dw.downfile2()
-	if sys.argv[1] == 'dwportinfo':
+	elif sys.argv[1] == 'dwportinfo':
 		dw = WebDownfile3()
 		dw.downfile3()
-	if sys.argv[1] == 'dwbakinfo':
+	elif sys.argv[1] == 'dwbakinfo':
 		dw = WebDownfile4()
 		dw.downfile4()
+	else: print help
 else: print help

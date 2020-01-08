@@ -222,6 +222,7 @@ class BaseInfo():
 	secidd=secid
 	typename='baseinfo'
 	baseinfo=BaseInfo()
+	ip=baseinfo.split(',')[4]
     #echo $HOSTNAME, $KERNEL, $TZ, $MAC, $IP, $CPU, $MEMORY, $DISK, $SERIESNO
 	the_page = '' 
 	def Upload(self): 
@@ -229,6 +230,7 @@ class BaseInfo():
 		'secid' : self.secidd,
 		'type'  : self.typename,
 		'baseinfo' : self.baseinfo,
+		'ip' : self.ip,
 		} 
 		print values
 		print self.url_Upload
@@ -299,19 +301,19 @@ if len(sys.argv) == 2:
 	if sys.argv[1] == 'upbaseinfo':
 		web=BaseInfo()
 		web.Upload()
-	if sys.argv[1] == 'upmoninfo':
+	elif sys.argv[1] == 'upmoninfo':
 		web=MonInfo()
 		web.Upload()		
-	if sys.argv[1] == 'upportinfo':
+	elif sys.argv[1] == 'upportinfo':
 		web=PortInfo()
 		web.Upload()	
-	if sys.argv[1] == 'downkey':
+	elif sys.argv[1] == 'downkey':
 		dw = DownKey()
 		dw.downfile()
-	if sys.argv[1] == 'dwselfinfo':
+	elif sys.argv[1] == 'dwselfinfo':
 		dw = AutoBackup()
 		dw.download()	
-	if sys.argv[1] == 'selfupdate':
+	elif sys.argv[1] == 'selfupdate':
 		dw = DownKey2()
 		dw.downfile2()
 	else: print help
