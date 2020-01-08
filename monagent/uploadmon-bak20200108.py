@@ -122,10 +122,6 @@ def MemUsed(system):
 		(status,swap) = commands.getstatusoutput("top -bn1 |grep 'Swap'|grep -v grep|awk -F',' '{print $1,$2}'")
 	return memory
 
-def BaseInfo():
-	(status,baseinfo) = commands.getstatusoutput("bash collexec.sh baseinfo")
-	return baseinfo
-
 #upload portinfo (self's port process message)
 class PortInfo(): 
 	url_Upload="http://"+serverip+":"+port 
@@ -205,14 +201,31 @@ class BaseInfo():
 		url_Upload="http://"+serverip2+":"+port	
 	secidd=secid
 	typename='baseinfo'
-	baseinfo=BaseInfo()
-    #echo $HOSTNAME, $KERNEL, $TZ, $MAC, $IP, $CPU, $MEMORY, $DISK, $SERIESNO
+	cpu=''
+	system=Sys()
+	hostname=Hostname()
+	tz=Tz()	
+	username=UserName()
+	storage=Storage()
+	(ip,netmask)=GetIp()
+	cpu=Cpu(system)
+	memory=Memory(system)
+	mac=Mac(system)
+
 	the_page = '' 
 	def Upload(self): 
 		values = {
 		'secid' : self.secidd,
 		'type'  : self.typename,
-		'baseinfo' : self.baseinfo,
+		'hostname' : self.hostname, 
+		'ip' : self.ip, 
+		'system' : self.system,
+		'cpu' : self.cpu,
+		'memory' : self.memory,
+		'storage' : self.storage,
+		'timezone' : self.tz,
+		'username' : self.username,
+		'mac': self.mac,
 		} 
 		print values
 		print self.url_Upload
