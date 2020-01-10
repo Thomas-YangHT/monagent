@@ -24,6 +24,6 @@ python fileUpdate.py uploadmon.py && \
 python $HOMEDIR/fileUpdate.py collexec.sh
 python $HOMEDIR/fileUpdate.py collfunc
 python $HOMEDIR/fileUpdate.py collconf
-
+ 
 /usr/bin/python $HOMEDIR/uploadmon.py upbaseinfo 
 [ "`grep $KEYname  ~/.ssh/authorized_keys`" ] && echo "Already install server key" || /usr/bin/python $HOMEDIR/uploadmon.py downkey
