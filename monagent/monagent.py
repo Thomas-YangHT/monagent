@@ -95,6 +95,30 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 content = f2.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                 f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
+            #下载更新collexec.sh
+            elif src == '/collexec.sh?secid='+secid :
+                f2 = open('collexec.sh','rb')
+                content = f2.read()
+                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
+            #下载更新collfunc
+            elif src == '/collfunc?secid='+secid :
+                f2 = open('collfunc','rb')
+                content = f2.read()
+                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
+            #下载更新collconf
+            elif src == '/collconf?secid='+secid :
+                f2 = open('collconf','rb')
+                content = f2.read()
+                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
+            #下载更新instmon.sh
+            elif src == '/instmon.sh?secid='+secid :
+                f2 = open('instmon.sh','rb')
+                content = f2.read()
+                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
             #下载备份设置baksetting
             elif src == '/dwbaksetting?secid='+secid :
                 f2 = open('/root/log/baksetting','rb')
