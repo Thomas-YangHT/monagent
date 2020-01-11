@@ -1,0 +1,120 @@
+#moninfo------------------------------------------------------------------------------------
+#OS
+func_OS(){
+  [ "`uname -a|grep Ubuntu`" ] && sys=ubuntu || sys=centos
+}
+
+#DATE时间戳
+func_TIMESTAMP(){
+	TIMESTAMP=`date '+%Y-%m-%d %H:%M:%S'`
+}
+#net dev name:
+func_NETDEV(){
+	eth=`ip a|grep $NETWORK\\.|sed 's/noprefixroute//'|awk '{print $7}'|grep -v "lo:"|head -n 1`
+}
+
+#IP
+func_IP(){
+    #IP=`ifconfig $eth |grep "inet "|awk '{print $2}'|sed 's/addr://'`
+	IP=`ip a show dev $eth |grep -Po "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"|grep -v 255|head -n 1`
+}
+
+#CPUidle%
+func_CPUIDLE(){
+    #CPUIDLE=`top -bn1 |grep Cpu|awk  '{print $8}'`
+	CPUIDLE=`top -bn1 |grep Cpu|grep -v grep|awk -F',' '{print $4}'|sed 's/id//g'|sed 's/%//g'|sed 's/ //g'`
+}
+
+#内存：total, used 单位KB
+func_MEM(){
+	#memory=(`top -bn1 |grep 'Mem :'|awk '{print $4,$8}'`)
+	MEMTOTAL=`cat /proc/meminfo |grep MemTotal|awk '{print $2}'`
+	MEMUSED=`free |grep Mem|awk '{print $3}'`
+}
+
+#网络进出带宽, RX, TX, 单位字节B
+func_NETSPEED(){
+	export LANGUAGE="en_US.utf-8"
+	ver=`/sbin/ifconfig --version 2>&1|grep 2.10`
+	[ "$ver" ] && netpre=(`/sbin/ifconfig $eth| grep bytes|awk '{print $5}'`) || netpre=(`/sbin/ifconfig $eth |grep bytes|awk '{print $2,$6}'|sed 's/bytes://g'`)
+	sleep 1
+	[ "$ver" ] && netnext=(`/sbin/ifconfig $eth| grep bytes|awk '{print $5}'`) || netnext=(`/sbin/ifconfig $eth |grep bytes|awk '{print $2,$6}'|sed 's/bytes://g'`)
+	RX=$((${netnext[0]}-${netpre[0]}))
+	TX=$((${netnext[1]}-${netpre[1]}))
+}
+#根分区的使用率 used
+func_DISKROOTRATE(){
+    #DISKROOTRATE=`df -h|grep "/$"|awk '{print $5}'|sed 's/%//'`
+	DISKROOTRATE=`df -h /|grep -w '/'|awk '{print $(NF-1)}'|sed 's/%//'`
+}
+
+#磁盘IO：sda硬盘的等待时间和利用率：await, util%
+func_DISKIO(){
+	io=(`iostat -x|grep -P "sda|vda"|awk '{print $10,$14}'`)
+	IOAWAIT=${io[0]}
+	IOUTIL=${io[1]}
+}
+#echo "$TIMESTAMP $IP $CPUIDLE $MEMTOTAL $MEMUSED $RX  $TX $DISKROOTRATE $IOAWAIT $IOUTIL"
+
+
+#portsinfo---------------------------------------------------------------------------------------
+#开放的端口: 协议、IP、Port、PID、procname
+func_NETPORTS(){
+	func_TIMESTAMP
+	func_IP
+    NETPORTS=(`netstat -nlptu|awk 'NR>2{if($1~"tcp")print $1"," $4","$7;if($1=="udp")print $1","$4","$6}'|sed -e 's/\//,/g' -e 's/:::/---,/g' -e 's/:/,/g' -e 's/---/:::/g'`)
+    echo -n>/tmp/netports.csv
+    rows=${#NETPORTS[@]}
+    for ((i=1;i<$rows;i++));
+    do
+       echo "$TIMESTAMP,$IP,${NETPORTS[$i]}" >>/tmp/netports.csv
+    done
+}
+#savetoMysql----------------------------------------------------------------------------------------------------
+func_SaveToMysql(){
+    ##建数据库和表后，将数据插入数据库
+    sql1="LOAD DATA LOCAL INFILE '/tmp/netports.csv'  INTO TABLE ports CHARACTER SET utf8  FIELDS TERMINATED BY ',' (timestamp, ip,protocol, ipl, port, pid, procname);"
+    sql2="insert into basemon(timestamp, ip, cpuidle,memtotal,memused,rx,tx,diskrootrate,ioawait,ioutil) values(\"$TIMESTAMP\",\"$IP\",$CPUIDLE, $MEMTOTAL, $MEMUSED, $RX,  $TX, $DISKROOTRATE, $IOAWAIT, $IOUTIL)"
+    sql3="delete from ports where ip='$IP'"
+    echo $sql1 $sql2 $sql3
+    echo $sql3|mysql -uyanght -D monitor -pyanght -h $MYSQL
+    echo $sql1|mysql -uyanght -D monitor -pyanght -h $MYSQL
+    echo $sql2|mysql -uyanght -D monitor -pyanght -h $MYSQL
+}
+
+#errinfo-------------------------------------------------------------------------------------------------------
+#Raid or Harddisk error
+func_MegaERR(){
+    MegaERR=`sudo -i megacli -PDList -aALL|grep -P "Err|Slot Number"|Firmware state|xargs -n 16|grep -vP "Err.*0.*Err.*0"`
+}
+
+
+#baseinfo---------------------------------------------------------------------------------------------------------
+#获取九项基础信息
+func_baseinfo(){
+	func_NETDEV
+	HOSTNAME=`hostname`
+	TZ=`tail -n 1 /etc/localtime`
+	KERNEL=`uname -ro`
+	#MAC=`(ifconfig $eth|grep ether||ifconfig $eth|grep HWaddr)|grep -Po '..:..:..:..:..:..'`
+	MAC=`ip a show dev $eth|grep -Po "[a-f0-9A-F]+:[a-f0-9A-F]+:[a-f0-9A-F]+:[a-f0-9A-F]+:[a-f0-9A-F]+:[a-f0-9A-F]+"|grep -v ff`
+	#IP=`/sbin/ifconfig $eth| egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | awk '{print $2}'|sed -e 's/addr://' -e 's/Mask://'`
+	IP=`ip a show dev $eth |grep -Po "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+"|grep -v 255|head -n 1`
+	CPU=`cat /proc/cpuinfo |grep 'model name'|awk -F':' '{print $2}'|uniq -c`
+	MEMORY=`cat /proc/meminfo |grep MemTotal`
+	DISK=`sudo -i fdisk -l |grep -v mapper|grep -Po 'Disk /dev/\K.*GB'|xargs`
+	SERIESNO=`sudo -i dmidecode -s system-serial-number`
+	echo $HOSTNAME, $KERNEL, $TZ, $MAC, $IP, $CPU, $MEMORY, $DISK, $SERIESNO
+
+	#sql="insert into baseinfo(hostname, kernel, tz, mac, ip, cpu, memory, disk, seriesno) \
+    # select \"$HOSTNAME\",\"$KERNEL\",\"$TZ\", \"$MAC\", \"$IP\", \"$CPU\",  \"$MEMORY\", \"$DISK\", \"$SERIESNO\" "
+	#echo $sql|mysql -uyanght -D monitor -pyanght -h $MYSQL
+}
+#Series Number
+func_SN(){
+    SN=`sudo -i dmidecode -s system-serial-number`
+}
+#bakinfo----------------------------------------------------------------------------------------------------
+func_bakinfo(){
+	echo "to be continue..."
+}

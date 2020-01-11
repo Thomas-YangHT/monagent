@@ -1,0 +1,5 @@
+
+#Config network before run:
+NETWORK=192.168.10
+MYSQL=192.168.10.28
+
