@@ -90,13 +90,13 @@ class MonInfo():
 			filewrited = 1
 		if filewrited == 1:
 			try:
-				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='moninfo',port=3306,charset='utf8')
+				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='monitor',port=3306,charset='utf8')
 				cur=conn.cursor()
 				sql=('delete from moninfo.moninfo')
 		   		print sql
 				count=cur.execute(sql)			
 			  	#sql=("LOAD DATA LOW_PRIORITY LOCAL INFILE '/root/moninfo' REPLACE INTO TABLE `moninfo`.`moninfo` FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
-				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/moninfo' INTO TABLE `moninfo` FIELDS TERMINATED BY ','  (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
+				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/moninfo' INTO TABLE `basemon` FIELDS TERMINATED BY ','  (`timestamp`, `ip`, `cpuidle`, `memtotal`, `memused`, `rx`, `tx`, `diskrootrate`, `ioawait`, `ioutil`);")
 				print sql
 				count=cur.execute(sql)
 				(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')

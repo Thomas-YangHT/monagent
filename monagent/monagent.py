@@ -219,7 +219,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                 f4 = open(filename,'a')
-                content=datevalue +','+ dicmess['moninfo']  
+                content=dicmess['moninfo']  
                 f4.write(content + '\n')
             #上传端口信息
             elif dicmess['secid'] == secid and dicmess['type'] == 'portinfo' :
