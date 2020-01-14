@@ -201,7 +201,7 @@ if len(sys.argv) == 2:
 		dw = BaseInfo()
 		dw.downfile()
 	elif sys.argv[1] == 'dwmoninfo':
-		dw = Moninfo()
+		dw = MonInfo()
 		dw.downfile2()
 	elif sys.argv[1] == 'dwportinfo':
 		dw = WebDownfile3()
