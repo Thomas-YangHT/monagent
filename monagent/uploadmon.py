@@ -124,23 +124,23 @@ def MemUsed(system):
 		(status,swap) = commands.getstatusoutput("top -bn1 |grep 'Swap'|grep -v grep|awk -F',' '{print $1,$2}'")
 	return memory
 
-def BaseInfo():
+def baseInfo():
 	(status,baseinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh baseinfo 2>>upload.err")
 	return baseinfo
 
-def MonInfo():
+def monInfo():
 	(status,moninfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh moninfo 2>>upload.err")
 	return moninfo
 
-def PortInfo():
+def portInfo():
 	(status,portinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh portsinfo 2>>upload.err")
 	return portinfo
 
-def BakInfo():
+def bakInfo():
 	(status,bakinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh bakinfo 2>>upload.err")
 	return bakinfo
 
-def ErrInfo():
+def errInfo():
 	(status,errinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh errinfo 2>>upload.err")
 	return errinfo
 
@@ -151,16 +151,16 @@ class PortInfo():
 		url_Upload="http://"+serverip2+":"+port 	
 	secidd=secid
 	typename='portinfo'
-	(ip,netmask)=GetIp()
-	portinfo=PortInfo()
+	#(ip,netmask)=GetIp()
+	portinfo=portInfo()
 	ip=portinfo.split(',')[1]
 	the_page = '' 
 	def Upload(self): 
 		values = {
 		'secid' : self.secidd,
 		'type'  : self.typename,
-		'ip' : self.ip, 
 		'portinfo'  : self.portinfo,
+		'ip'    : self.ip, 
 		} 
 		print values
 		print self.url_Upload
@@ -168,6 +168,7 @@ class PortInfo():
 		req = urllib2.Request(self.url_Upload, postdata) 
 		response = urllib2.urlopen(req)
 		self.the_page = response.read()
+		print self.the_page
 		if serverip2 != "" :
 			print "server2 uploading..."
 			req = urllib2.Request(self.url_Upload, postdata) 
@@ -182,7 +183,7 @@ class MonInfo():
 		url_Upload="http://"+serverip2+":"+port	 
 	secidd=secid
 	typename='moninfo'
-	moninfo=MonInfo()
+	moninfo=monInfo()
 	#TIMESTAMP, IP, CPUIDLE, MEMTOTAL, MEMUSED, RX, TX, DISKROOTUSAGE, IOAWAIT, IOUTIL
 	ip=moninfo.split(',')[1]
 	the_page = '' 
@@ -213,7 +214,7 @@ class BaseInfo():
 		url_Upload="http://"+serverip2+":"+port	
 	secidd=secid
 	typename='baseinfo'
-	baseinfo=BaseInfo()
+	baseinfo=baseInfo()
 	ip=baseinfo.split(',')[4]
     #echo $HOSTNAME, $KERNEL, $TZ, $MAC, $IP, $CPU, $MEMORY, $DISK, $SERIESNO
 	the_page = '' 
