@@ -17,7 +17,6 @@ PORT = 18000
 text_content = '''HTTP/1.1 200 OK
 Content-Type:text/html
 Server: myserver
-Connection: keep-alive
 
 <html>
 <head>
@@ -38,7 +37,17 @@ timezone:<input type="text" name="timezone"><br>
 </form> 
 </html>
 '''
+return_content = '''HTTP/1.1 200 OK
+Content-Type:text/html
 
+<html>
+<head>
+<title>OK</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head>
+<p>Received OK</p>
+</html>
+'''
 secid = '5toRb5lCdEU2q5H'
 
 # This class defines response to each request
@@ -223,14 +232,15 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 f4.write(content + '\n')
             #上传端口信息
             elif dicmess['secid'] == secid and dicmess['type'] == 'portinfo' :
-                self.request.sendall(text_content + '\n <p>' + dicmess['portinfo'] + '</p>')
+                self.request.sendall(return_content)
                 filename='/root/log/portinfo'+dicmess['ip']+'.log'
                 (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                 (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
                 #(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                 f5 = open(filename,'wb')
                 content=dicmess['portinfo']   
-                #f5.write(content + '\n')
+                f5.write(content + '\n')
+                f5.close()
             #中心上传备份信息
             elif dicmess['secid'] == secid and dicmess['type'] == 'baksetting' :
                 self.request.sendall(text_content + '\n <p>' + dicmess['baksetting']  + '</p>')
