@@ -136,6 +136,30 @@ class DownKey():
 		f.write(self.the_page + '\n')
 
 
+def Sys():
+	(status,system)  = commands.getstatusoutput('uname -ro')
+	return system
+
+
+def GetIp():
+	system=Sys()
+	ETH=Eth()
+	ip=''
+	netmask=""
+	if system.find('FreeBSD') != -1 :
+		#(status,mac) = commands.getstatusoutput('ifconfig |grep ether|awk \'{print $2}\'')
+		(status,ip) = commands.getstatusoutput("ifconfig em0| egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | awk '{print $2,$4}'")
+		(ip,netmask)=ip.split()
+		#print status,ip
+		#print ip,netmask
+	elif system.find('Linux') != -1 :	
+		#example: take internal ip addr
+		(status,ip) = commands.getstatusoutput("/sbin/ifconfig "+ETH+"| egrep 'inet[^0-9].*' | grep -v '127.0.0.1' | awk '{print $2,$4}'|sed -e 's/addr://' -e 's/Mask://'")
+		(ip,netmask)=ip.split()
+		#print status,ip
+		#print ip,netmask
+	return ip,netmask
+
 #download self IP's BACKUP configure
 class AutoBackup():
 	system=Sys()
