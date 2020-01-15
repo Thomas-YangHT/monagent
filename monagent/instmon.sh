@@ -10,12 +10,12 @@ crontab -l|grep -vP "uploadmon.py|nettrafic" >/var/spool/cron/${USER}
 
 echo "*/5 * * * * sleep 5;/usr/bin/python $HOMEDIR/uploadmon.py upmoninfo >$HOMEDIR/upmoninfo.log 2>&1 "  >>/var/spool/cron/${USER}
 #echo "*/5 * * * * /bin/bash $HOMEDIR/nettrafic.sh $ETH >>$HOMEDIR/nettrafic.log 2>&1"  >>/var/spool/cron/${USER}
-echo "*/5 * * * * sleep 5;/usr/bin/python $HOMEDIR/uploadmon.py upportinfo >$HOMEDIR/upportinfo.log 2>&1"  >>/var/spool/cron/${USER}
+echo "*/5 * * * * sleep 10;/usr/bin/python $HOMEDIR/uploadmon.py upbaseinfo >$HOMEDIR/upbaseinfo.log 2>&1"  >>/var/spool/cron/${USER}
+echo "*/5 * * * * sleep 15;/usr/bin/python $HOMEDIR/uploadmon.py upportinfo >$HOMEDIR/upportinfo.log 2>&1"  >>/var/spool/cron/${USER}
 echo "*/5 * * * * /usr/bin/python $HOMEDIR/fileUpdate.py uploadmon.py >$HOMEDIR/fileupdate.log 2>&1"  >>/var/spool/cron/${USER}
-echo "*/5 * * * * /usr/bin/python $HOMEDIR/fileUpdate.py collexec.sh >$HOMEDIR/fileupdate.log 2>&1"  >>/var/spool/cron/${USER}
+echo "*/5 * * * * sleep 5;/usr/bin/python $HOMEDIR/fileUpdate.py collexec.sh >$HOMEDIR/fileupdate.log 2>&1 "  >>/var/spool/cron/${USER}
 echo "*/5 * * * * /usr/bin/python $HOMEDIR/fileUpdate.py collfunc >$HOMEDIR/fileupdate.log 2>&1"  >>/var/spool/cron/${USER}
 echo "*/5 * * * * /usr/bin/python $HOMEDIR/fileUpdate.py collconf >$HOMEDIR/fileupdate.log 2>&1"  >>/var/spool/cron/${USER}
-echo "*/5 * * * * /usr/bin/python $HOMEDIR/uploadmon.py upbaseinfo >$HOMEDIR/upbaseinfo.log 2>&1"  >>/var/spool/cron/${USER}
 
 [ -d "$HOMEDIR" ] || mkdir $HOMEDIR
 cd $HOMEDIR && \
