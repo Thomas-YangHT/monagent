@@ -92,7 +92,7 @@ class MonInfo():
 			try:
 				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='monitor',port=3306,charset='utf8')
 				cur=conn.cursor()
-				sql=('delete from moninfo.moninfo')
+				sql=('delete from basemon where ip is null')
 		   		print sql
 				count=cur.execute(sql)			
 			  	#sql=("LOAD DATA LOW_PRIORITY LOCAL INFILE '/root/moninfo' REPLACE INTO TABLE `moninfo`.`moninfo` FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
@@ -108,7 +108,7 @@ class MonInfo():
 				print "Mysql Error %d: %s" % (e.args[0], e.args[1])
 
 #download portinfo
-class WebDownfile3():
+class PortInfo():
 	url_down="http://"+serverip+":"+port+"/dwportinfo?secid="+secid
 	url_down2="http://"+serverip2+":"+port+"/dwportinfo?secid="+secid
 	the_page=''
@@ -131,13 +131,13 @@ class WebDownfile3():
 			filewrited = 1
 		if filewrited == 1:
 			try:
-				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='moninfo',port=3306,charset='utf8')
+				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='monitor',port=3306,charset='utf8')
 				cur=conn.cursor()
 				sql=('delete from moninfo.portinfo')
 		   		print sql
 				count=cur.execute(sql)			
 			  	#sql=("LOAD DATA LOW_PRIORITY LOCAL INFILE '/root/moninfo' REPLACE INTO TABLE `moninfo`.`moninfo` FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
-				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/portinfo' INTO TABLE `portinfo` FIELDS TERMINATED BY ','  (`date`, `hostname`, `ip`, `port`);")
+				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/portinfo' INTO TABLE `ports` FIELDS TERMINATED BY ','  (`timestamp`, `ip`, `protocol`, `ipl`, `port`, `pid`, `procname`,);")
 				print sql
 				count=cur.execute(sql)
 				(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
@@ -204,7 +204,7 @@ if len(sys.argv) == 2:
 		dw = MonInfo()
 		dw.downfile2()
 	elif sys.argv[1] == 'dwportinfo':
-		dw = WebDownfile3()
+		dw = PortInfo()
 		dw.downfile3()
 	elif sys.argv[1] == 'dwbakinfo':
 		dw = WebDownfile4()
