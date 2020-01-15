@@ -168,13 +168,12 @@ class PortInfo():
 		req = urllib2.Request(self.url_Upload, postdata) 
 		response = urllib2.urlopen(req,timeout=5)
 		self.the_page = response.read()
-		print self.the_page
 		if serverip2 != "" :
 			print "server2 uploading..."
 			req = urllib2.Request(self.url_Upload, postdata) 
 			response = urllib2.urlopen(req)
 			self.the_page = response.read()			
-		#print self.the_page
+		print self.the_page
 
 #upload moninfo (self's monitor message)
 class MonInfo(): 
@@ -205,7 +204,7 @@ class MonInfo():
 			req = urllib2.Request(self.url_Upload, postdata) 
 			response = urllib2.urlopen(req)
 			self.the_page = response.read()		
-		#print self.the_page
+		print self.the_page
 
 #upload baseinfo (self's configure)
 class BaseInfo(): 
@@ -236,7 +235,7 @@ class BaseInfo():
 			req = urllib2.Request(self.url_Upload, postdata) 
 			response = urllib2.urlopen(req)
 			self.the_page = response.read()		
-		#print self.the_page
+		print self.the_page
 
 #download pub key
 class DownKey():
