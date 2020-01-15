@@ -151,15 +151,13 @@ class PortInfo():
 		url_Upload="http://"+serverip2+":"+port 	
 	secidd=secid
 	typename='portinfo'
-	hostname=Hostname()
 	(ip,netmask)=GetIp()
-	ports=Ports()
+	ports=PortInfo()
 	the_page = '' 
 	def Upload(self): 
 		values = {
 		'secid' : self.secidd,
 		'type'  : self.typename,
-		'hostname' : self.hostname, 
 		'ip' : self.ip, 
 		'ports'  : self.ports,
 		} 

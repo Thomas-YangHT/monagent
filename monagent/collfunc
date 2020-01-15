@@ -61,6 +61,7 @@ func_DISKIO(){
 #开放的端口: 协议、IP、Port、PID、procname
 func_NETPORTS(){
 	func_TIMESTAMP
+	func_NETDEV
 	func_IP
     NETPORTS=(`netstat -nlptu|awk 'NR>2{if($1~"tcp")print $1"," $4","$7;if($1=="udp")print $1","$4","$6}'|sed -e 's/\//,/g' -e 's/:::/---,/g' -e 's/:/,/g' -e 's/---/:::/g'`)
     echo -n>/tmp/netports.csv
