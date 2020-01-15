@@ -70,6 +70,7 @@ func_NETPORTS(){
     do
        echo "$TIMESTAMP,$IP,${NETPORTS[$i]}" >>/tmp/netports.csv
     done
+    echo "">>/tmp/netports.csv
 }
 #savetoMysql----------------------------------------------------------------------------------------------------
 func_SaveToMysql(){
