@@ -140,6 +140,9 @@ def Sys():
 	(status,system)  = commands.getstatusoutput('uname -ro')
 	return system
 
+def Eth():
+	(status,ETH) = commands.getstatusoutput('/sbin/ip a|grep ' + NETWORK +' |sed \'s/noprefixroute//\'|awk \'{print $7}\'|grep -v "lo:"|head -n 1')
+	return ETH
 
 def GetIp():
 	system=Sys()
