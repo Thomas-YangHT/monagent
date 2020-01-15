@@ -133,7 +133,7 @@ class PortInfo():
 			try:
 				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='monitor',port=3306,charset='utf8')
 				cur=conn.cursor()
-				sql=('delete from ports where ip is null')
+				sql=('delete from ports')
 		   		print sql
 				count=cur.execute(sql)			
 			  	#sql=("LOAD DATA LOW_PRIORITY LOCAL INFILE '/root/moninfo' REPLACE INTO TABLE `moninfo`.`moninfo` FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
