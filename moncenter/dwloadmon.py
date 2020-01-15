@@ -137,7 +137,7 @@ class PortInfo():
 		   		print sql
 				count=cur.execute(sql)			
 			  	#sql=("LOAD DATA LOW_PRIORITY LOCAL INFILE '/root/moninfo' REPLACE INTO TABLE `moninfo`.`moninfo` FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
-				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/portinfo' INTO TABLE `ports` FIELDS TERMINATED BY ','  (`timestamp`, `ip`, `protocol`, `ipl`, `port`, `pid`, `procname`,);")
+				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/portinfo' INTO TABLE `ports` FIELDS TERMINATED BY ','  (`timestamp`, `ip`, `protocol`, `ipl`, `port`, `pid`, `procname`);")
 				print sql
 				count=cur.execute(sql)
 				(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
