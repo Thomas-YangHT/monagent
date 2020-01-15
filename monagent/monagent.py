@@ -145,7 +145,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 f.write(datevalue + ' downloadmoninfo ' + self.client_address[0] + '\n')
             #中心下载端口占用情况信息
             elif src == '/dwportinfo?secid='+secid :
-                (status,getportinfo) = commands.getstatusoutput('find /root/log/portinfo* -exec tail -n 1 {} \;')
+                (status,getportinfo) = commands.getstatusoutput('find /root/log/portinfo* -exec cat {} \;')
                 content = getportinfo
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                 f.write(datevalue + ' downloadportinfo ' + self.client_address[0] + '\n')
@@ -217,7 +217,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 filename='/root/log/moninfo'+dicmess['ip']+'.log'
                 (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                 (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                #(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                 f4 = open(filename,'a')
                 content=dicmess['moninfo']  
                 f4.write(content + '\n')
@@ -227,10 +227,10 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 filename='/root/log/portinfo'+dicmess['ip']+'.log'
                 (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                 (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f5 = open(filename,'a')
+                #(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f5 = open(filename,'wb')
                 content=dicmess['portinfo']   
-                f5.write(content + '\n')
+                #f5.write(content + '\n')
             #中心上传备份信息
             elif dicmess['secid'] == secid and dicmess['type'] == 'baksetting' :
                 self.request.sendall(text_content + '\n <p>' + dicmess['baksetting']  + '</p>')
