@@ -167,8 +167,9 @@ class PortInfo():
 		postdata = urllib.urlencode(values) 
 		req = urllib2.Request(self.url_Upload, postdata) 
 		response = urllib2.urlopen(req)
-		self.the_page = response.read()
-		print self.the_page
+		print "urlopened"
+		#self.the_page = response.read()
+		#print self.the_page
 		if serverip2 != "" :
 			print "server2 uploading..."
 			req = urllib2.Request(self.url_Upload, postdata) 
