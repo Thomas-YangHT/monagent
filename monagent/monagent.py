@@ -213,7 +213,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 print key,dicmess[key]
             #上传服务器基础信息
             if dicmess['secid'] == secid and dicmess['type'] == 'baseinfo' :
-                self.request.sendall(text_content + '\n <p>' + dicmess['baseinfo'] + '</p>')
+                self.request.sendall(return_content)
                 (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                 (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/baseinfo ];then touch /root/log/baseinfo; fi')
                 (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/baseinfo\`;if [ ! -n "${trueth}" ]; then sed -i \'\' /'+dicmess['ip']+'/d /root/log/baseinfo; fi')
@@ -222,7 +222,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 f3.write(content + '\n')
             #上传监控信息
             elif dicmess['secid'] == secid and dicmess['type'] == 'moninfo' :
-                self.request.sendall(text_content + '\n <p>' + dicmess['moninfo'] + '</p>')
+                self.request.sendall(return_content)
                 filename='/root/log/moninfo'+dicmess['ip']+'.log'
                 (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                 (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
@@ -240,7 +240,6 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 f5 = open(filename,'wb')
                 content=dicmess['portinfo']   
                 f5.write(content + '\n')
-                f5.close()
             #中心上传备份信息
             elif dicmess['secid'] == secid and dicmess['type'] == 'baksetting' :
                 self.request.sendall(text_content + '\n <p>' + dicmess['baksetting']  + '</p>')
