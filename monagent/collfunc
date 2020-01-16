@@ -120,3 +120,27 @@ func_SN(){
 func_bakinfo(){
 	echo "to be continue..."
 }
+
+func_web(){
+	func_NETDEV
+	func_IP
+	[ "$IP" = "192.168.10.28" ] && web=llzg.com && flag=1 || flag=0
+	[ "$IP" = "192.168.10.40" ] && web=llzg.cn  && flag=1 || flag=0
+    if [ $flag -eq 1 ];then
+	  #总访问量 class=1
+	  more /var/log/nginx/access.log|wc -l |awk -v web=$web '{print web","$0",total.pv,1"}'
+      more /var/log/nginx/access.log|awk '{print $1}'|sort |uniq -c|sort -rn|wc -l|awk -v web=$web '{print web","$0",total.ip,1"}'
+      #访问链接前10 class=2
+      more /var/log/nginx/access.log|awk '{print $7}'|sort |uniq -c|sort -rn|head|awk -v web=$web '{print web","$1","$2",2"}'
+      #IP访问量前10 class=3
+      more /var/log/nginx/access.log|awk '{print $1}'|sort |uniq -c|sort -rn|head|awk -v web=$web '{print web","$1","$2",3"}'
+      #GET POST HEAD比例 class=4
+      more /var/log/nginx/access.log|grep -Po "GET|POST|HEAD"|sort |uniq -c|awk -v web=$web '{print web","$1","$2",4"}'
+      #系统或设备比例 class=5
+      more /var/log/nginx/access.log|awk '{print $13$14}'|sort |uniq -c|sort -rn|head|sed 's/(//g'|awk -v web=$web '{print web","$1","$2",5"}'
+      #浏览器排名前10 class=6
+      more /var/log/nginx/access.log|awk '{print $12}'|sort |uniq -c|sort -rn|head|awk -v web=$web '{print web","$1","$2",6"}'
+      #访问状态码统计 class=7
+      more /var/log/nginx/access.log|awk '{print $9}'|sort |uniq -c|sort -rn|awk -v web=$web '{print web","$1","$2",7"}'
+    fi
+}

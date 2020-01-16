@@ -28,6 +28,7 @@ funcinfo=("$baseinfo" "$moninfo" "$portsinfo" "$bakinfo" "$errinfo" "$osInfo" "$
 #		portsinfo   端口信息
 #		bakinfo			备份信息
 #		errinfo			错误信息：如硬盘故障
+#   webinfo     访问信息：WEB
 case $1 in
 baseinfo)
   func_baseinfo
@@ -53,6 +54,9 @@ bakinfo)
 ;;
 errorinfo)
   func_MegaERR  &&  echo "$MegaERR"
+;;
+webinfo)
+  func_web
 ;;
 1|os)
   func_OS &&   echo $sys
