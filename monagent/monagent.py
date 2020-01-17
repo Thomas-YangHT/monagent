@@ -1,6 +1,6 @@
 #coding=utf-8
 #用作监控、备份、基础信息的上传和下载中转服务
-#日志默认都写在了/root/log/下，待修改
+#日志默认都写在了/root/log/下，待修改成k8s挂载PVC
 # use TCPServer
 import commands
 import SocketServer
