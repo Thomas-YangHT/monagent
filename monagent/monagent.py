@@ -103,31 +103,37 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 f2 = open('uploadmon.py','rb')
                 content = f2.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' download uploadmon.py ' + self.client_address[0] + '\n')
             #下载更新collexec.sh
             elif src == '/collexec.sh?secid='+secid :
                 f2 = open('collexec.sh','rb')
                 content = f2.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' download collexec.sh ' + self.client_address[0] + '\n')
             #下载更新collfunc
             elif src == '/collfunc?secid='+secid :
                 f2 = open('collfunc','rb')
                 content = f2.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' download collfunc ' + self.client_address[0] + '\n')
             #下载更新collconf
             elif src == '/collconf?secid='+secid :
                 f2 = open('collconf','rb')
                 content = f2.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' download collconf ' + self.client_address[0] + '\n')
+            #下载更新collcron.sh
+            elif src == '/collcron.sh?secid='+secid :
+                f2 = open('collcron.sh','rb')
+                content = f2.read()
+                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f.write(datevalue + ' download collcron.sh ' + self.client_address[0] + '\n')
             #下载更新instmon.sh
             elif src == '/instmon.sh?secid='+secid :
                 f2 = open('instmon.sh','rb')
                 content = f2.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' downloaduploadmon.py ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' download instmon.sh ' + self.client_address[0] + '\n')
             #下载备份设置baksetting
             elif src == '/dwbaksetting?secid='+secid :
                 f2 = open('/root/log/baksetting','rb')
@@ -240,6 +246,26 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 f5 = open(filename,'wb')
                 content=dicmess['portinfo']   
                 f5.write(content + '\n')
+            #上传web信息
+            elif dicmess['secid'] == secid and dicmess['type'] == 'webinfo' :
+                self.request.sendall(return_content)
+                filename='/root/log/webinfo'+dicmess['ip']+'.log'
+                (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
+                (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
+                #(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f5 = open(filename,'wb')
+                content=dicmess['webinfo']   
+                f5.write(content + '\n')
+            #上传err信息
+            elif dicmess['secid'] == secid and dicmess['type'] == 'errinfo' :
+                self.request.sendall(return_content)
+                filename='/root/log/errinfo'+dicmess['ip']+'.log'
+                (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
+                (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
+                #(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f5 = open(filename,'wb')
+                content=dicmess['errinfo']   
+                f5.write(content + '\n')                
             #中心上传备份信息
             elif dicmess['secid'] == secid and dicmess['type'] == 'baksetting' :
                 self.request.sendall(text_content + '\n <p>' + dicmess['baksetting']  + '</p>')

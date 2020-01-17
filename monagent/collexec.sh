@@ -27,8 +27,8 @@ funcinfo=("$baseinfo" "$moninfo" "$portsinfo" "$bakinfo" "$errinfo" "$osInfo" "$
 #		moninfo			监控信息
 #		portsinfo   端口信息
 #		bakinfo			备份信息
-#		errinfo			错误信息：如硬盘故障
-#   webinfo     访问信息：WEB
+#		errinfo			错误信息：如硬盘故障、内存故障、风扇电源故障、系统故障等
+#   webinfo     访问信息：WEB访问量等
 case $1 in
 baseinfo)
   func_baseinfo
@@ -53,7 +53,11 @@ bakinfo)
   func_bakinfo
 ;;
 errorinfo)
-  func_MegaERR  &&  echo "$MegaERR"
+  func_TIMESTAMP
+  func_NETDEV
+  func_IP
+  func_MegaERR  &&  echo "$TIMESTAMP,$IP,$MegaERR,disk"
+  func_ipmievent && echo "$TIMESTAMP,$IP,$IpmiEvent,ipmi"
 ;;
 webinfo)
   func_web

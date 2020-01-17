@@ -11,24 +11,89 @@ NETWORK="192.168.10"
 ExecDir='~/monagent.client'
 
 def baseInfo():
-	(status,baseinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh baseinfo 2>>upload.err")
+	(status,baseinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh baseinfo 2>coll.err")
 	return baseinfo
 
 def monInfo():
-	(status,moninfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh moninfo 2>>upload.err")
+	(status,moninfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh moninfo 2>>coll.err")
 	return moninfo
 
 def portInfo():
-	(status,portinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh portsinfo 2>>upload.err")
+	(status,portinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh portsinfo 2>>coll.err")
 	return portinfo
 
 def bakInfo():
-	(status,bakinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh bakinfo 2>>upload.err")
+	(status,bakinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh bakinfo 2>>coll.err")
 	return bakinfo
 
 def errInfo():
-	(status,errinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh errinfo 2>>upload.err")
+	(status,errinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh errinfo 2>>coll.err")
 	return errinfo
+
+def webInfo():
+	(status,webinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh webinfo 2>>coll.err")
+	return webinfo
+
+#upload webinfo 
+class webInfo(): 
+	url_Upload="http://"+serverip+":"+port 
+	if serverip2 != "" :
+		url_Upload="http://"+serverip2+":"+port 	
+	secidd=secid
+	typename='webinfo'
+	#(ip,netmask)=GetIp()
+	webinfo=webInfo()
+	ip=webinfo.split(',')[1]
+	the_page = '' 
+	def Upload(self): 
+		values = {
+		'secid' : self.secidd,
+		'type'  : self.typename,
+		'webinfo'  : self.webinfo,
+		'ip'    : self.ip, 
+		} 
+		print values
+		print self.url_Upload
+		postdata = urllib.urlencode(values) 
+		req = urllib2.Request(self.url_Upload, postdata) 
+		response = urllib2.urlopen(req,timeout=5)
+		self.the_page = response.read()
+		if serverip2 != "" :
+			print "server2 uploading..."
+			req = urllib2.Request(self.url_Upload, postdata) 
+			response = urllib2.urlopen(req)
+			self.the_page = response.read()			
+		print self.the_page
+
+#upload errInfo
+class ErrInfo(): 
+	url_Upload="http://"+serverip+":"+port 
+	if serverip2 != "" :
+		url_Upload="http://"+serverip2+":"+port 	
+	secidd=secid
+	typename='errinfo'
+	errinfo=errInfo()
+	ip=errinfo.split(',')[1]
+	the_page = '' 
+	def Upload(self): 
+		values = {
+		'secid' : self.secidd,
+		'type'  : self.typename,
+		'errinfo'  : self.errinfo,
+		'ip'    : self.ip, 
+		} 
+		print values
+		print self.url_Upload
+		postdata = urllib.urlencode(values) 
+		req = urllib2.Request(self.url_Upload, postdata) 
+		response = urllib2.urlopen(req,timeout=5)
+		self.the_page = response.read()
+		if serverip2 != "" :
+			print "server2 uploading..."
+			req = urllib2.Request(self.url_Upload, postdata) 
+			response = urllib2.urlopen(req)
+			self.the_page = response.read()			
+		print self.the_page
 
 #upload portinfo (self's port process message)
 class PortInfo(): 
@@ -37,8 +102,8 @@ class PortInfo():
 		url_Upload="http://"+serverip2+":"+port 	
 	secidd=secid
 	typename='portinfo'
-	#(ip,netmask)=GetIp()
 	portinfo=portInfo()
+	#TIIMESTAMP, IP, PROTOCOL, IPL, Port, PID, Procname
 	ip=portinfo.split(',')[1]
 	the_page = '' 
 	def Upload(self): 
