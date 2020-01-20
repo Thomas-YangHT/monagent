@@ -49,6 +49,7 @@ class WebInfo():
 	typename='webinfo'
 	#(ip,netmask)=GetIp()
 	webinfo=webInfo()
+	ip=''
 	if webinfo != "":
 		ip=webinfo.split(',')[1]
 	the_page = '' 
@@ -61,10 +62,11 @@ class WebInfo():
 		} 
 		print values
 		print self.url_Upload
-		postdata = urllib.urlencode(values) 
-		req = urllib2.Request(self.url_Upload, postdata) 
-		response = urllib2.urlopen(req,timeout=5)
-		self.the_page = response.read()
+		if ip != '' :
+			postdata = urllib.urlencode(values) 
+			req = urllib2.Request(self.url_Upload, postdata) 
+			response = urllib2.urlopen(req,timeout=5)
+			self.the_page = response.read()
 		if serverip2 != "" :
 			print "server2 uploading..."
 			req = urllib2.Request(self.url_Upload, postdata) 
@@ -80,6 +82,7 @@ class ErrInfo():
 	secidd=secid
 	typename='errinfo'
 	errinfo=errInfo()
+	ip=''
 	if errinfo != "":
 		ip=errinfo.split(',')[1]
 	the_page = '' 
