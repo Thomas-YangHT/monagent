@@ -36,7 +36,7 @@ def errInfo():
 def webInfo():
 	(status,webinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh webinfo 2>>coll.err")
 	if status != 0 :
-		return 0
+		return ''
 	else :
 		return webinfo
 
@@ -62,7 +62,7 @@ class WebInfo():
 		} 
 		print values
 		print self.url_Upload
-		if ip != '' :
+		if self.ip != '' :
 			postdata = urllib.urlencode(values) 
 			req = urllib2.Request(self.url_Upload, postdata) 
 			response = urllib2.urlopen(req,timeout=5)
