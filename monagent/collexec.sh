@@ -56,8 +56,10 @@ errinfo)
   func_TIMESTAMP
   func_NETDEV
   func_IP
-  func_MegaERR  &&  echo "$TIMESTAMP,$IP,$MegaERR,disk"
-  func_ipmievent && echo "$TIMESTAMP,$IP,$IpmiEvent,ipmi"
+  func_MegaERR   &&  [ "$MegaERR" ]  && echo "$TIMESTAMP,$IP,$MegaERR,disk"
+  func_ipmievent &&  [ "IpmiEvent" ] && echo "$TIMESTAMP,$IP,$IpmiEvent,ipmi"
+  func_CollErr   &&  [ "CollErr" ]   && echo "$TIMESTAMP,$IP,$CollErr,coll"
+  func_UploadErr &&  [ "UploadErr" ] && echo "$TIMESTAMP,$IP,$UploadErr,Upload"
 ;;
 webinfo)
   func_web

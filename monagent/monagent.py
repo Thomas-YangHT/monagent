@@ -49,6 +49,7 @@ Content-Type:text/html
 </html>
 '''
 secid = '5toRb5lCdEU2q5H'
+(status,genmd5) = commands.getstatusoutput('md5sum coll* *py|grep -v err > md5.txt')
 
 # This class defines response to each request
 class MyTCPHandler(SocketServer.BaseRequestHandler):
@@ -98,12 +99,24 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 content = f1.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                 f.write(datevalue + ' downloadauthkey ' + self.client_address[0] + '\n')
+            #下载更新md5.txt
+            elif src == '/md5.txt?secid='+secid :
+                f2 = open('md5.txt','rb')
+                content = f2.read()
+                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f.write(datevalue + ' download uploadmon.py ' + self.client_address[0] + '\n')
             #下载更新uploadmon.py
             elif src == '/uploadmon.py?secid='+secid :
                 f2 = open('uploadmon.py','rb')
                 content = f2.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                 f.write(datevalue + ' download uploadmon.py ' + self.client_address[0] + '\n')
+            #下载更新fileupdate.py
+            elif src == '/fileUpdate.py?secid='+secid :
+                f2 = open('fileUpdate.py','rb')
+                content = f2.read()
+                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f.write(datevalue + ' download fileUpdate.py ' + self.client_address[0] + '\n')
             #下载更新collexec.sh
             elif src == '/collexec.sh?secid='+secid :
                 f2 = open('collexec.sh','rb')

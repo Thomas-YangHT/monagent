@@ -93,7 +93,14 @@ func_MegaERR(){
 func_ipmievent(){
     IpmiEvent=`sudo ipmitool -I open pef status`
 }
-
+#coll.err
+func_CollErr(){
+	CollErr=`tail coll.err`
+}
+#upload.err
+func_UploadErr(){
+	UploadErr=`tail upload.err`
+}
 #baseinfo---------------------------------------------------------------------------------------------------------
 #获取九项基础信息
 func_baseinfo(){

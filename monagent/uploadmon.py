@@ -28,11 +28,17 @@ def bakInfo():
 
 def errInfo():
 	(status,errinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh errinfo 2>>coll.err")
-	return errinfo
+	if status != 0 :
+		return 0
+	else :
+		return errinfo
 
 def webInfo():
 	(status,webinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh webinfo 2>>coll.err")
-	return webinfo
+	if status != 0 :
+		return 0
+	else :
+		return webinfo
 
 #upload webinfo 
 class webInfo(): 
@@ -255,18 +261,19 @@ class AutoBackup():
 				#example: /usr/bin/rsync -vzrtopg --progress --delete hening@192.168.0.217::backup /home/backup --password-file=/etc/rsync.pas
 				(status,retmess) = commands.getstatusoutput('sudo rsync -vzrtopg --progress --delete '+res[3]+' '+res[4]+'>>rsync.log')
 				print status,retmess
-
 		else:
 			print res[3],res[4],res[5],"has empty value,exit"
 
 
 
 help='''
-1. python uploadmon.py upbaseinfo ----upload local sys message;
-2. python uploadmon.py downkey	  ----download auth key;
-3. python uploadmon.py dwselfinfo ----download self backup info;
-4. python uploadmon.py upmoninfo  ----upload monitor message;
-5. python uploadmon.py upportinfo ----upload portinfo message;
+1. python uploadmon.py upbaseinfo  ----upload local sys message;
+2. python uploadmon.py downkey	   ----download auth key;
+##3. python uploadmon.py dwbakinfo   ----download self backup info;
+4. python uploadmon.py upmoninfo   ----upload monitor message;
+5. python uploadmon.py upportinfo  ----upload portinfo message;
+6. python uploadmon.py upwebinfo   ----upload webinfo message;
+7. python uploadmon.py uperrinfo   ----upload errinfo message;
 '''
 
 if len(sys.argv) == 2:
@@ -279,14 +286,20 @@ if len(sys.argv) == 2:
 	elif sys.argv[1] == 'upportinfo':
 		web=PortInfo()
 		web.Upload()	
+	elif sys.argv[1] == 'upwebinfo':
+		web=WebInfo()
+		web.Upload()	
+	elif sys.argv[1] == 'uperrinfo':
+		web=ErrInfo()
+		web.Upload()	
+#	elif sys.argv[1] == 'upbakinfo':
+#		web=BakInfo()
+#		web.Upload()	
 	elif sys.argv[1] == 'downkey':
 		dw = DownKey()
 		dw.downfile()
-	elif sys.argv[1] == 'dwselfinfo':
-		dw = AutoBackup()
-		dw.download()	
-	elif sys.argv[1] == 'selfupdate':
-		dw = DownKey2()
-		dw.downfile2()
+#	elif sys.argv[1] == 'dwbakinfo':
+#		dw = AutoBackup()
+#		dw.download()	
 	else: print help
 else: print help
