@@ -52,7 +52,7 @@ portsinfo)
 bakinfo)
   func_bakinfo
 ;;
-errorinfo)
+errinfo)
   func_TIMESTAMP
   func_NETDEV
   func_IP

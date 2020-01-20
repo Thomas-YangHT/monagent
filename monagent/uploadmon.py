@@ -43,7 +43,8 @@ class webInfo():
 	typename='webinfo'
 	#(ip,netmask)=GetIp()
 	webinfo=webInfo()
-	ip=webinfo.split(',')[1]
+	if webinfo != "":
+		ip=webinfo.split(',')[1]
 	the_page = '' 
 	def Upload(self): 
 		values = {
@@ -73,7 +74,8 @@ class ErrInfo():
 	secidd=secid
 	typename='errinfo'
 	errinfo=errInfo()
-	ip=errinfo.split(',')[1]
+	if errinfo != "":
+		ip=errinfo.split(',')[1]
 	the_page = '' 
 	def Upload(self): 
 		values = {
