@@ -148,6 +148,88 @@ class PortInfo():
 			except MySQLdb.Error,e:
 				print "Mysql Error %d: %s" % (e.args[0], e.args[1])
 
+#download webinfo
+class WebInfo():
+	url_down="http://"+serverip+":"+port+"/dwwebinfo?secid="+secid
+	url_down2="http://"+serverip2+":"+port+"/dwwebinfo?secid="+secid
+	the_page=''
+	def downfile3(self):
+		try:
+			req = urllib2.Request(self.url_down) 
+			response = urllib2.urlopen(req) 
+		except urllib2.URLError,e:
+			print e.reason
+			req = urllib2.Request(self.url_down2) 
+			response = urllib2.urlopen(req)
+		self.the_page = response.read()	
+		print self.the_page
+		content = self.the_page
+		try:
+			f2 = open(MYHOME + 'webinfo','wb')
+			f2.write(content)
+			f2.close()
+		finally:
+			filewrited = 1
+		if filewrited == 1:
+			try:
+				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='monitor',port=3306,charset='utf8')
+				cur=conn.cursor()
+				sql=('delete from webinfo')
+		   		print sql
+				count=cur.execute(sql)			
+			  	#sql=("LOAD DATA LOW_PRIORITY LOCAL INFILE '/root/moninfo' REPLACE INTO TABLE `moninfo`.`moninfo` FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
+				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/webinfo' INTO TABLE `webinfo` FIELDS TERMINATED BY ','  (`timestamp`, `ip`, `webname`, `num`, `content`, `class`);")
+				print sql
+				count=cur.execute(sql)
+				(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+			   	f.write(datevalue + " loaddata from "+monroot+"/webinfo\n")
+				conn.commit()
+				cur.close()
+				conn.close()
+			except MySQLdb.Error,e:
+				print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+
+#download errinfo
+class ErrInfo():
+	url_down="http://"+serverip+":"+port+"/dwerrinfo?secid="+secid
+	url_down2="http://"+serverip2+":"+port+"/dwerrinfo?secid="+secid
+	the_page=''
+	def downfile3(self):
+		try:
+			req = urllib2.Request(self.url_down) 
+			response = urllib2.urlopen(req) 
+		except urllib2.URLError,e:
+			print e.reason
+			req = urllib2.Request(self.url_down2) 
+			response = urllib2.urlopen(req)
+		self.the_page = response.read()	
+		print self.the_page
+		content = self.the_page
+		try:
+			f2 = open(MYHOME + 'errinfo','wb')
+			f2.write(content)
+			f2.close()
+		finally:
+			filewrited = 1
+		if filewrited == 1:
+			try:
+				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='monitor',port=3306,charset='utf8')
+				cur=conn.cursor()
+				sql=('delete from errinfo')
+		   		print sql
+				count=cur.execute(sql)			
+			  	#sql=("LOAD DATA LOW_PRIORITY LOCAL INFILE '/root/moninfo' REPLACE INTO TABLE `moninfo`.`moninfo` FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' ESCAPED BY '\"' LINES TERMINATED BY '\\n' (`date`, `hostname`, `ip`, `cpu`, `mem`, `storage`, `net`);")
+				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/errinfo' INTO TABLE `errinfo` FIELDS TERMINATED BY ','  (`timestamp`, `ip`, `errcontent`, `type`);")
+				print sql
+				count=cur.execute(sql)
+				(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+			   	f.write(datevalue + " loaddata from "+monroot+"/errinfo\n")
+				conn.commit()
+				cur.close()
+				conn.close()
+			except MySQLdb.Error,e:
+				print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+
 #download bakinfo
 class WebDownfile4():
 	url_down="http://"+serverip+":"+port+"/dwbakinfo?secid="+secid
