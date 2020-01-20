@@ -276,6 +276,8 @@ help='''
 2. python stepone_reghost.py dwmoninfo	 ----download recently moninfo;
 3. python stepone_reghost.py dwportinfo	 ----download recently portinfo;
 4. python stepone_reghost.py dwbakinfo	 ----download recently bakinfo;
+5. python stepone_reghost.py dwwebinfo	 ----download recently webinfo;
+6. python stepone_reghost.py dwerrinfo	 ----download recently errinfo;
 '''
 
 if len(sys.argv) == 2:
