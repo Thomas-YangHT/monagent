@@ -30,7 +30,7 @@ jobs:
         cd ../moncenter
         docker build --no-cache -t moncenter -f ./dockerfile.alpine.monagent.center .
         sh docker-run.sh
-        cd ../monclient
+        cd ../monagent
         cp instmon.sh fileUpdate.py /export/download/monagent.client/
       shell: bash
     - name: failed
