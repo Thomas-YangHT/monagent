@@ -95,11 +95,11 @@ func_ipmievent(){
 }
 #coll.err
 func_CollErr(){
-	CollErr=`tail coll.err`
+	CollErr=`tail -n 2 coll.err |sed 's/,//g'`
 }
 #upload.err
 func_UploadErr(){
-	UploadErr=`tail upload.err`
+	UploadErr=`tail -n 2 upload.err |sed 's/,//g'`
 }
 #baseinfo---------------------------------------------------------------------------------------------------------
 #获取九项基础信息
@@ -142,18 +142,18 @@ func_web(){
     if [ $flag -eq 1 ];then
       #总访问量 class=1
       more /var/log/nginx/access.log|wc -l |awk -v web=$web '{print web","$0",total.pv,1"}'
-      more /var/log/nginx/access.log|awk '{print $1}'|sort |uniq -c|sort -rn|wc -l|awk -v timestamp=$TIMESTAMP -v ip=$IP -v web=$web '{print timestamp","ip","web","$0",total.ip,1"}'
+      more /var/log/nginx/access.log|awk '{print $1}'|sort |uniq -c|sort -rn|wc -l|awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$0",total.ip,1"}'
       #访问链接前10 class=2
-      more /var/log/nginx/access.log|awk '{print $7}'|sort |uniq -c|sort -rn|head|awk -v timestamp=$TIMESTAMP -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",2"}'
+      more /var/log/nginx/access.log|awk '{print $7}'|sort |uniq -c|sort -rn|head|awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",2"}'
       #IP访问量前10 class=3
-      more /var/log/nginx/access.log|awk '{print $1}'|sort |uniq -c|sort -rn|head|awk -v timestamp=$TIMESTAMP -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",3"}'
+      more /var/log/nginx/access.log|awk '{print $1}'|sort |uniq -c|sort -rn|head|awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",3"}'
       #GET POST HEAD比例 class=4
-      more /var/log/nginx/access.log|grep -Po "GET|POST|HEAD"|sort |uniq -c|awk -v timestamp=$TIMESTAMP -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",4"}'
+      more /var/log/nginx/access.log|grep -Po "GET|POST|HEAD"|sort |uniq -c|awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",4"}'
       #系统或设备比例 class=5
-      more /var/log/nginx/access.log|awk '{print $13$14}'|sort |uniq -c|sort -rn|head|sed 's/(//g'|awk -v timestamp=$TIMESTAMP -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",5"}'
+      more /var/log/nginx/access.log|awk '{print $13$14}'|sort |uniq -c|sort -rn|head|sed 's/(//g'|awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",5"}'
       #浏览器排名前10 class=6
-      more /var/log/nginx/access.log|awk '{print $12}'|sort |uniq -c|sort -rn|head|awk -v timestamp=$TIMESTAMP -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",6"}'
+      more /var/log/nginx/access.log|awk '{print $12}'|sort |uniq -c|sort -rn|head|awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",6"}'
       #访问状态码统计 class=7
-      more /var/log/nginx/access.log|awk '{print $9}'|sort |uniq -c|sort -rn|awk -v timestamp=$TIMESTAMP -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",7"}'
+      more /var/log/nginx/access.log|awk '{print $9}'|sort |uniq -c|sort -rn|awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",7"}'
     fi
 }
