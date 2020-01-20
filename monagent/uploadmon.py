@@ -41,7 +41,7 @@ def webInfo():
 		return webinfo
 
 #upload webinfo 
-class webInfo(): 
+class WebInfo(): 
 	url_Upload="http://"+serverip+":"+port 
 	if serverip2 != "" :
 		url_Upload="http://"+serverip2+":"+port 	

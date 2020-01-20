@@ -1,0 +1,1 @@
+移动到monagent下，通过  curl -s http://192.168.10.92:18000/instmon.sh?secid=5toRb5lCdEU2q5H|sh  安装
