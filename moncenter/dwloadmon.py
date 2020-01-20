@@ -289,10 +289,10 @@ if len(sys.argv) == 2:
 		dw = PortInfo()
 		dw.downfile3()
 	elif sys.argv[1] == 'dwwebinfo':
-		dw = WebInfo()
+		dw = WebInfo() 
 		dw.downfile3()
 	elif sys.argv[1] == 'dwerrinfo':
-		dw = ErrInfo()
+		dw = ErrInfo() 
 		dw.downfile3()
 	elif sys.argv[1] == 'dwbakinfo':
 		dw = WebDownfile4()
