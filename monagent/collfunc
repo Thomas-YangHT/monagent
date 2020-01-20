@@ -141,7 +141,7 @@ func_web(){
     [ "$IP" = "192.168.10.40" ] && web=llzg.cn  && flag=1 
     if [ $flag -eq 1 ];then
       #总访问量 class=1
-      more /var/log/nginx/access.log|wc -l |awk -v web=$web '{print web","$0",total.pv,1"}'
+      more /var/log/nginx/access.log|wc -l |awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$0",total.pv,1"}'
       more /var/log/nginx/access.log|awk '{print $1}'|sort |uniq -c|sort -rn|wc -l|awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$0",total.ip,1"}'
       #访问链接前10 class=2
       more /var/log/nginx/access.log|awk '{print $7}'|sort |uniq -c|sort -rn|head|awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",2"}'
