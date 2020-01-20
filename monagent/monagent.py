@@ -152,31 +152,43 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 f2 = open('/root/log/baksetting','rb')
                 content = f2.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' dwbaksetting ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' dw baksetting ' + self.client_address[0] + '\n')
             #中心下载备份反馈信息
             elif src == '/dwbakinfo?secid='+secid :
                 (status,getbakinfo) = commands.getstatusoutput('cat /root/log/bakinfo')
                 content = getbakinfo
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' downloadbaseinfo ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' download bakinfo ' + self.client_address[0] + '\n')
             #中心下载服务器配置基础信息
             elif src == '/dwbaseinfo?secid='+secid :
                 (status,getbaseinfo) = commands.getstatusoutput('cat /root/log/baseinfo')
                 content = getbaseinfo
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' downloadbaseinfo ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' download baseinfo ' + self.client_address[0] + '\n')
             #中心下载各服务器监控信息
             elif src == '/dwmoninfo?secid='+secid :
                 (status,getmoninfo) = commands.getstatusoutput('find /root/log/moninfo* -exec tail -n 1 {} \;')
                 content = getmoninfo
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' downloadmoninfo ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' download moninfo ' + self.client_address[0] + '\n')
             #中心下载端口占用情况信息
             elif src == '/dwportinfo?secid='+secid :
                 (status,getportinfo) = commands.getstatusoutput('find /root/log/portinfo* -exec cat {} \;')
                 content = getportinfo
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' downloadportinfo ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' download portinfo ' + self.client_address[0] + '\n')
+            #中心下载webinfo信息
+            elif src == '/dwwebinfo?secid='+secid :
+                (status,getwebinfo) = commands.getstatusoutput('find /root/log/webinfo* -exec cat {} \;')
+                content = getwebinfo
+                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f.write(datevalue + ' download webinfo ' + self.client_address[0] + '\n')
+            #中心下载errinfo信息
+            elif src == '/dwerrinfo?secid='+secid :
+                (status,geterrinfo) = commands.getstatusoutput('find /root/log/errinfo* -exec cat {} \;')
+                content = geterrinfo
+                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                f.write(datevalue + ' download errinfo ' + self.client_address[0] + '\n')                                
             #老接口，下载备份配置信息，已用不上了，暂时保留
             elif str1[0] == '/downloadmessage' and mess1[0] == 'secid='+secid :
                 tmp2   = mess1[1].split('=')
