@@ -4,6 +4,7 @@
 # use TCPServer
 import commands
 import SocketServer
+#import gzip
 #from SocketServer import StreamRequestHandler as SRH
 #import MySQLdb
 import sys,urllib,urllib2
@@ -98,7 +99,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 f1 = open('id_rsa.pub','rb')
                 content = f1.read()
                 (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' downloadauthkey ' + self.client_address[0] + '\n')
+                f.write(datevalue + ' download authkey ' + self.client_address[0] + '\n')
             #下载更新md5.txt
             elif src == '/md5.txt?secid='+secid :
                 f2 = open('md5.txt','rb')
@@ -279,7 +280,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
                 #(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                 f5 = open(filename,'wb')
-                content=dicmess['webinfo']   
+                #content=gzip.decompress(dicmess['webinfo']).decode("utf-8")
+                content=dicmess['webinfo']
                 f5.write(content + '\n')
             #上传err信息
             elif dicmess['secid'] == secid and dicmess['type'] == 'errinfo' :
