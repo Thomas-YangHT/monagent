@@ -1,3 +1,2 @@
-/usr/sbin/crond
-tail -f /monagent.center/server8000.log
-wait
+/usr/sbin/crond 
+tail -F -s 10 /monagent.center/server8000.log
