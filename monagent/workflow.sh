@@ -1,7 +1,8 @@
 #!(which bash)
 def checkout(){  
     git checkout && \
-    git pull || failure=1
+    git pull && \
+    checkout=1 || failure=1
 }
 
 def testcode(){    
@@ -28,8 +29,8 @@ def build(){
     success=1 || failure=1
 }
 
-checkout()
-testcode()
+checkout()  && \
+testcode()  && \
 build()
 
 if [ failure=1 ]; then

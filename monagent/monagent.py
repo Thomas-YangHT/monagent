@@ -84,8 +84,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         tmp  	   = request.split(' ')
         method     = tmp[0]
         src        = tmp[1]
-        print "Method: ", method
-        print "src:", src
+        #print "Method: ", method
+        #print "src:", src
 
         if method == 'GET':          
             str1   = src.split('?')
@@ -94,134 +94,21 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             else:   
                 mess1  = str1[1].split('&')
                 tmp1   = mess1[0].split('=')
-            #下载 ssh 认证key
-            if src == '/.ssh/id_rsa.pub?secid='+secid :
-                f1 = open('id_rsa.pub','rb')
-                content = f1.read()
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download authkey ' + self.client_address[0] + '\n')
-            #下载更新md5.txt
-            elif src == '/md5.txt?secid='+secid :
-                f2 = open('md5.txt','rb')
-                content = f2.read()
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download uploadmon.py ' + self.client_address[0] + '\n')
-            #下载更新uploadmon.py
-            elif src == '/uploadmon.py?secid='+secid :
-                f2 = open('uploadmon.py','rb')
-                content = f2.read()
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download uploadmon.py ' + self.client_address[0] + '\n')
-            #下载更新fileupdate.py
-            elif src == '/fileUpdate.py?secid='+secid :
-                f2 = open('fileUpdate.py','rb')
-                content = f2.read()
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download fileUpdate.py ' + self.client_address[0] + '\n')
-            #下载更新collexec.sh
-            elif src == '/collexec.sh?secid='+secid :
-                f2 = open('collexec.sh','rb')
-                content = f2.read()
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download collexec.sh ' + self.client_address[0] + '\n')
-            #下载更新collfunc
-            elif src == '/collfunc?secid='+secid :
-                f2 = open('collfunc','rb')
-                content = f2.read()
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download collfunc ' + self.client_address[0] + '\n')
-            #下载更新collconf
-            elif src == '/collconf?secid='+secid :
-                f2 = open('collconf','rb')
-                content = f2.read()
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download collconf ' + self.client_address[0] + '\n')
-            #下载更新collcron.sh
-            elif src == '/collcron.sh?secid='+secid :
-                f2 = open('collcron.sh','rb')
-                content = f2.read()
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download collcron.sh ' + self.client_address[0] + '\n')
-            #下载更新instmon.sh
-            elif src == '/instmon.sh?secid='+secid :
-                f2 = open('instmon.sh','rb')
-                content = f2.read()
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download instmon.sh ' + self.client_address[0] + '\n')
-            #下载备份设置baksetting
-            elif src == '/dwbaksetting?secid='+secid :
-                f2 = open('/root/log/baksetting','rb')
-                content = f2.read()
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' dw baksetting ' + self.client_address[0] + '\n')
-            #中心下载备份反馈信息
-            elif src == '/dwbakinfo?secid='+secid :
-                (status,getbakinfo) = commands.getstatusoutput('cat /root/log/bakinfo')
-                content = getbakinfo
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download bakinfo ' + self.client_address[0] + '\n')
-            #中心下载服务器配置基础信息
-            elif src == '/dwbaseinfo?secid='+secid :
-                (status,getbaseinfo) = commands.getstatusoutput('cat /root/log/baseinfo')
-                content = getbaseinfo
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download baseinfo ' + self.client_address[0] + '\n')
-            #中心下载各服务器监控信息
-            elif src == '/dwmoninfo?secid='+secid :
-                (status,getmoninfo) = commands.getstatusoutput('find /root/log/moninfo* -exec tail -n 1 {} \;')
-                content = getmoninfo
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download moninfo ' + self.client_address[0] + '\n')
-            #中心下载端口占用情况信息
-            elif src == '/dwportinfo?secid='+secid :
-                (status,getportinfo) = commands.getstatusoutput('find /root/log/portinfo* -exec cat {} \;')
-                content = getportinfo
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download portinfo ' + self.client_address[0] + '\n')
-            #中心下载webinfo信息
-            elif src == '/dwwebinfo?secid='+secid :
-                (status,getwebinfo) = commands.getstatusoutput('find /root/log/webinfo* -exec cat {} \;')
-                content = getwebinfo
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download webinfo ' + self.client_address[0] + '\n')
-            #中心下载errinfo信息
-            elif src == '/dwerrinfo?secid='+secid :
-                (status,geterrinfo) = commands.getstatusoutput('find /root/log/errinfo* -exec cat {} \;')
-                content = geterrinfo
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f.write(datevalue + ' download errinfo ' + self.client_address[0] + '\n')                                
-            #老接口，下载备份配置信息，已用不上了，暂时保留
-            elif str1[0] == '/downloadmessage' and mess1[0] == 'secid='+secid :
-                tmp2   = mess1[1].split('=')
-                ip     = tmp2[1]
-                try:
-                    conn=MySQLdb.connect(host='localhost',user='yanght',passwd='yanght',db='cmdb',port=3306,charset='utf8')
-                    cur=conn.cursor()
-                    sql=('select id,ip,hostname,downloadurl,downloaddest,downloadmode from base where ip =\"%s\"'%ip)
-                    print sql
-                    count=cur.execute(sql)
-                    print 'there has %s rows record' % count
-                    if count != 0 :
-                        result=cur.fetchone()
-                        print 'find record in db:',result[0],result[1],result[2],result[3],result[4],result[5]
-                    content=''
-                    for x in result:
-                        if type(x) != None:
-                            content+=str(x)+';'
-                        else:
-                            content+='empty'+';'
-                    #content = str(result[0])+' '+result[1]+' '+result[2]+' '+result[3]+' '+result[4]+' '+result[5]
+            DownFiles=['id_rsa.pub','md5.txt','uploadmon.py','fileUpdate.py','collexec.sh','collfunc','collconf','collcron.sh','instmon.sh','baksetting']
+            DownFiles.append('dwbakinfo')
+            DownFiles.append('dwbaseinfo')
+            DownFiles.append('dwmoninfo')
+            DownFiles.append('dwportinfo')
+            DownFiles.append('dwwebinfo')
+            DownFiles.append('dwerrinfo')
+            for  dwfile in DownFiles :
+                if src == '/' + dwfile + '?secid='+secid :
+                    f1 = open(dwfile,'rb')
+                    content = f1.read()
                     (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                    f.write(datevalue + ' downloadmessage: ' + self.client_address[0] + ' ' + content + '\n')
-
-                    conn.commit()
-                    cur.close()
-                    conn.close()
-                except MySQLdb.Error,e:
-                    print "Mysql Error %d: %s" % (e.args[0], e.args[1])
-            else:
-                content = text_content
-
+                    f.write(datevalue + ' download '+dwfile+' ' + self.client_address[0] + '\n')
+                else:
+                    content = text_content
             self.request.sendall(content)
 
         if method == 'POST':
@@ -243,89 +130,34 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             
             for key in dicmess:
                 print key,dicmess[key]
-            #上传服务器基础信息
-            if dicmess['secid'] == secid and dicmess['type'] == 'baseinfo' :
-                self.request.sendall(return_content)
-                (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
-                (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/baseinfo ];then touch /root/log/baseinfo; fi')
-                (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/baseinfo\`;if [ ! -n "${trueth}" ]; then sed -i \'\' /'+dicmess['ip']+'/d /root/log/baseinfo; fi')
-                f3 = open('/root/log/baseinfo','a')
-                content = dicmess['baseinfo']
-                f3.write(content + '\n')
-            #上传监控信息
-            elif dicmess['secid'] == secid and dicmess['type'] == 'moninfo' :
-                self.request.sendall(return_content)
-                filename='/root/log/moninfo'+dicmess['ip']+'.log'
-                (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
-                (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
-                #(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f4 = open(filename,'a')
-                content=dicmess['moninfo']  
-                f4.write(content + '\n')
-            #上传端口信息
-            elif dicmess['secid'] == secid and dicmess['type'] == 'portinfo' :
-                self.request.sendall(return_content)
-                filename='/root/log/portinfo'+dicmess['ip']+'.log'
-                (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
-                (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
-                #(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f5 = open(filename,'wb')
-                content=dicmess['portinfo']   
-                f5.write(content + '\n')
-            #上传web信息
-            elif dicmess['secid'] == secid and dicmess['type'] == 'webinfo' :
-                self.request.sendall(return_content)
-                filename='/root/log/webinfo'+dicmess['ip']+'.log'
-                (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
-                (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
-                #(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f5 = open(filename,'wb')
-                #content=gzip.decompress(dicmess['webinfo']).decode("utf-8")
-                content=dicmess['webinfo']
-                f5.write(content + '\n')
-            #上传err信息
-            elif dicmess['secid'] == secid and dicmess['type'] == 'errinfo' :
-                self.request.sendall(return_content)
-                filename='/root/log/errinfo'+dicmess['ip']+'.log'
-                (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
-                (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
-                #(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f5 = open(filename,'wb')
-                content=dicmess['errinfo']   
-                f5.write(content + '\n')                
-            #中心上传备份信息
-            elif dicmess['secid'] == secid and dicmess['type'] == 'baksetting' :
-                self.request.sendall(text_content + '\n <p>' + dicmess['baksetting']  + '</p>')
-                filename='/root/log/baksetting'
-                (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
-                (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f6 = open(filename,'wb')
-                content=dicmess['baksetting']
-                #content=content.encode('gbk')
-                #s=u'\u957f\u6625\u5e02'
-                #print urllib.unquote(str(s)).decode('utf8')
-                #print content.decode("raw_unicode-escape"),len(content),type(content)
-                print content
-                fds=content.split(',')
-                content=''
-                for i in range(len(fds)/4) :
-                    content += fds[i*4] +','+ fds[i*4+1] +','+ fds[i*4+2] +','+ fds[i*4+3] + "\n"
-                f6.write(content)
-            #上传备份结果信息
-            elif dicmess['secid'] == secid and dicmess['type'] == 'bakinfo' :
-                self.request.sendall(text_content + '\n <p>' + dicmess['bakinfo']  + '</p>')
-                filename='/root/log/bakinfo'
-                (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
-                (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
-                (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                f7 = open(filename,'wb')
-                content=dicmess['bakinfo']
-                print content
-                f7.write(content)
-            else:
-                print 'incorrect secid'
-            
+            UpFiles=['baseinfo','baksetting','bakinfo']
+            UpIpFiles=['moninfo','portinfo','webinfo','errinfo']
+            for uf in UpFiles :           
+                if dicmess['secid'] == secid and dicmess['type'] == uf :
+                    self.request.sendall(return_content)
+                    (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
+                    (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/'+uf+' ];then touch /root/log/'+uf+'; fi')
+                    (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/'+uf+'\`;if [ ! -n "${trueth}" ]; then sed -i \'\' /'+dicmess['ip']+'/d /root/log/'+uf+'; fi')
+                    f2 = open('/root/log/'+uf,'a')
+                    content = dicmess[uf]
+                    if dicmess['type'] == 'baksetting' :
+                        fds=content.split(',')
+                        content=''
+                        for i in range(len(fds)/4) :
+                            content += fds[i*4] +','+ fds[i*4+1] +','+ fds[i*4+2] +','+ fds[i*4+3] + "\n"
+                    f2.write(content + '\n')
+            for uf in UpIpFiles :
+                if dicmess['secid'] == secid and dicmess['type'] == uf :
+                    self.request.sendall(return_content)
+                    filename='/root/log/' + uf + dicmess['ip']+'.log'
+                    (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
+                    (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
+                    f3 = open(filename,'a')
+                    content=dicmess[uf]  
+                    f3.write(content + '\n')
+                else:
+                    print 'incorrect secid or type'
+
             
 # Create the server
 server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)

@@ -201,7 +201,7 @@ class BaseInfo():
 
 #download pub key
 class DownKey():
-	url_down="http://"+serverip+":"+port+"/.ssh/id_rsa.pub?secid="+secid
+	url_down="http://"+serverip+":"+port+"/id_rsa.pub?secid="+secid
 	the_page=''
 	def downfile(self):
 		req = urllib2.Request(self.url_down) 
