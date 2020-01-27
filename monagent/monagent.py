@@ -100,7 +100,10 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             DownIpFiles = ['moninfo','portinfo','webinfo','errinfo']
             for  dwfile in DownFiles :
                 if src == '/' + dwfile + '?secid='+secid :
-                    f1 = open('/root/log/'+dwfile,'rb')
+                    if src == '/baseinfo?secid='+secid :
+                        f1 = open('/root/log/baseinfo','rb')
+                    else:
+                        f1 = open(dwfile,'rb')
                     content = f1.read()
                     (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                     f.write(datevalue + ' download '+dwfile+' ' + self.client_address[0] + '\n')
