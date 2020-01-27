@@ -28,8 +28,8 @@ MYPWD=dicconf['MYPWD']
 
 #download baseinfo
 class BaseInfo():
-	url_down="http://"+serverip+":"+port+"/dwbaseinfo?secid="+secid
-	url_down2="http://"+serverip2+":"+port+"/dwbaseinfo?secid="+secid
+	url_down="http://"+serverip+":"+port+"/baseinfo?secid="+secid
+	url_down2="http://"+serverip2+":"+port+"/baseinfo?secid="+secid
 	the_page=''
 	def downfile(self):
 		try:
@@ -68,8 +68,8 @@ class BaseInfo():
 
 #download moninfo
 class MonInfo():
-	url_down="http://"+serverip+":"+port+"/dwmoninfo?secid="+secid
-	url_down2="http://"+serverip2+":"+port+"/dwmoninfo?secid="+secid
+	url_down="http://"+serverip+":"+port+"/moninfo?secid="+secid
+	url_down2="http://"+serverip2+":"+port+"/moninfo?secid="+secid
 	the_page=''
 	def downfile2(self):
 		try:
@@ -109,8 +109,8 @@ class MonInfo():
 
 #download portinfo
 class PortInfo():
-	url_down="http://"+serverip+":"+port+"/dwportinfo?secid="+secid
-	url_down2="http://"+serverip2+":"+port+"/dwportinfo?secid="+secid
+	url_down="http://"+serverip+":"+port+"/portinfo?secid="+secid
+	url_down2="http://"+serverip2+":"+port+"/portinfo?secid="+secid
 	the_page=''
 	def downfile3(self):
 		try:
@@ -150,8 +150,8 @@ class PortInfo():
 
 #download webinfo
 class WebInfo():
-	url_down="http://"+serverip+":"+port+"/dwwebinfo?secid="+secid
-	url_down2="http://"+serverip2+":"+port+"/dwwebinfo?secid="+secid
+	url_down="http://"+serverip+":"+port+"/webinfo?secid="+secid
+	url_down2="http://"+serverip2+":"+port+"/webinfo?secid="+secid
 	the_page=''
 	def downfile3(self):
 		try:
@@ -191,8 +191,8 @@ class WebInfo():
 
 #download errinfo
 class ErrInfo():
-	url_down="http://"+serverip+":"+port+"/dwerrinfo?secid="+secid
-	url_down2="http://"+serverip2+":"+port+"/dwerrinfo?secid="+secid
+	url_down="http://"+serverip+":"+port+"/errinfo?secid="+secid
+	url_down2="http://"+serverip2+":"+port+"/errinfo?secid="+secid
 	the_page=''
 	def downfile3(self):
 		try:
@@ -232,8 +232,8 @@ class ErrInfo():
 
 #download bakinfo
 class WebDownfile4():
-	url_down="http://"+serverip+":"+port+"/dwbakinfo?secid="+secid
-	url_down2="http://"+serverip2+":"+port+"/dwbakinfo?secid="+secid
+	url_down="http://"+serverip+":"+port+"/bakinfo?secid="+secid
+	url_down2="http://"+serverip2+":"+port+"/bakinfo?secid="+secid
 	the_page=''
 	def downfile4(self):
 		try:
@@ -272,12 +272,12 @@ class WebDownfile4():
 				print "Mysql Error %d: %s" % (e.args[0], e.args[1])
 
 help='''
-1. python stepone_reghost.py dwbaseinfo	 ----download baseinfo;
-2. python stepone_reghost.py dwmoninfo	 ----download recently moninfo;
-3. python stepone_reghost.py dwportinfo	 ----download recently portinfo;
-4. python stepone_reghost.py dwbakinfo	 ----download recently bakinfo;
-5. python stepone_reghost.py dwwebinfo	 ----download recently webinfo;
-6. python stepone_reghost.py dwerrinfo	 ----download recently errinfo;
+1. python dwloadmon.py dwbaseinfo	 ----download baseinfo;
+2. python dwloadmon.py dwmoninfo	 ----download recently moninfo;
+3. python dwloadmon.py dwportinfo	 ----download recently portinfo;
+4. python dwloadmon.py dwbakinfo	 ----download recently bakinfo;
+5. python dwloadmon.py dwwebinfo	 ----download recently webinfo;
+6. python dwloadmon.py dwerrinfo	 ----download recently errinfo;
 '''
 
 if len(sys.argv) == 2:

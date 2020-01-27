@@ -95,16 +95,22 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 mess1  = str1[1].split('&')
                 tmp1   = mess1[0].split('=')
             DownFiles=['id_rsa.pub','md5.txt','uploadmon.py','fileUpdate.py','collexec.sh','collfunc','collconf','collcron.sh','instmon.sh','baksetting']
-            DownFiles.append('dwbakinfo')
-            DownFiles.append('dwbaseinfo')
-            DownFiles.append('dwmoninfo')
-            DownFiles.append('dwportinfo')
-            DownFiles.append('dwwebinfo')
-            DownFiles.append('dwerrinfo')
+            DownFiles.append('bakinfo')
+            DownFiles.append('baseinfo')
+            DownIpFiles = ['moninfo','portinfo','webinfo','errinfo']
             for  dwfile in DownFiles :
                 if src == '/' + dwfile + '?secid='+secid :
                     f1 = open(dwfile,'rb')
                     content = f1.read()
+                    (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                    f.write(datevalue + ' download '+dwfile+' ' + self.client_address[0] + '\n')
+            for dwfile in DownIpFiles :
+                if src == '/' + dwfile + '?secid='+secid :
+                    if src == '/moninfo?secid='+secid :
+                        (status,getinfo) = commands.getstatusoutput('find /root/log/moninfo* -exec tail -n 1 {} \;')
+                    else:
+                        (status,getinfo) = commands.getstatusoutput('find /root/log/'+dwfile+'* -exec cat {} \;')
+                    content = getinfo
                     (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                     f.write(datevalue + ' download '+dwfile+' ' + self.client_address[0] + '\n')
                 else:
