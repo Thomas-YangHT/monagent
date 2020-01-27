@@ -143,8 +143,11 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                     self.request.sendall(return_content)
                     (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                     (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/'+uf+' ];then touch /root/log/'+uf+'; fi')
-                    (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/'+uf+'\`;if [ ! -n "${trueth}" ]; then sed -i \'\' /'+dicmess['ip']+'/d /root/log/'+uf+'; fi')
-                    f2 = open('/root/log/'+uf,'a')
+                    (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/'+uf+'\`;if [ ! -n "${trueth}" ]; then sed -i \'/'+dicmess['ip']+'/d\' /root/log/'+uf+'; fi')
+                    if dicmess['type'] == 'baseinfo' :
+                        f2 = open('/root/log/'+uf,'a')
+                    else:
+                        f2 = open('/root/log/'+uf,'wb')
                     content = dicmess[uf]
                     if dicmess['type'] == 'baksetting' :
                         fds=content.split(',')
@@ -158,7 +161,10 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                     filename='/root/log/' + uf + dicmess['ip']+'.log'
                     (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                     (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
-                    f3 = open(filename,'a')
+                    if dicmess['type'] == 'moninfo' :
+                        f3 = open(filename,'a')
+                    else:
+                        f3 = open(filename,'wb')
                     content=dicmess[uf]  
                     f3.write(content + '\n')
                 else:
