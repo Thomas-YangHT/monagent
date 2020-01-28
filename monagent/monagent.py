@@ -86,6 +86,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         src        = tmp[1]
         #print "Method: ", method
         #print "src:", src
+        content = ''
 
         if method == 'GET':          
             str1   = src.split('?')
@@ -116,8 +117,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                     content = getinfo
                     (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                     f.write(datevalue + ' download '+dwfile+' ' + self.client_address[0] + '\n')
-                else:
-                    content = text_content
+            if content == ''    
+                content = text_content
             self.request.sendall(content)
 
         if method == 'POST':
@@ -170,8 +171,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                         f3 = open(filename,'wb')
                     content=dicmess[uf]  
                     f3.write(content + '\n')
-                else:
-                    print 'incorrect secid or type'
+            if content == ''
+                print 'incorrect secid or type'
 
             
 # Create the server
