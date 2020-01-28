@@ -117,7 +117,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                     content = getinfo
                     (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                     f.write(datevalue + ' download '+dwfile+' ' + self.client_address[0] + '\n')
-            if content == ''  :  
+            if content == '' :  
                 content = text_content
             self.request.sendall(content)
 
