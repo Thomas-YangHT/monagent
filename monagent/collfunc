@@ -87,19 +87,19 @@ func_SaveToMysql(){
 #errinfo-------------------------------------------------------------------------------------------------------
 #Raid or Harddisk error
 func_MegaERR(){
-    MegaERR=`sudo -i megacli -PDList -aALL|grep -P "Err|Slot Number|Firmware state"|xargs -n 16|grep -vP "Err.*0.*Err.*0"`
+    MegaERR=`sudo -i megacli -PDList -aALL|grep -P "Err|Slot Number|Firmware state"|xargs -n 16|grep -vP "Err.*0.*Err.*0"|wc -l`
 }
 #ipmitool hardware event
 func_ipmievent(){
-    IpmiEvent=`sudo ipmitool -I open pef status`
+    IpmiEvent=`sudo ipmitool -I open pef status|sed 's/,//g'|xargs`
 }
 #coll.err
 func_CollErr(){
-	CollErr=`tail -n 2 coll.err |sed 's/,//g'`
+	CollErr=`tail -n 2 coll.err |sed 's/,//g'|xargs`
 }
 #upload.err
 func_UploadErr(){
-	UploadErr=`tail -n 2 upload.err |sed 's/,//g'`
+	UploadErr=`tail -n 2 upload.err |sed 's/,//g'|xargs`
 }
 #baseinfo---------------------------------------------------------------------------------------------------------
 #获取九项基础信息
@@ -156,4 +156,42 @@ func_web(){
       #访问状态码统计 class=7
       more /var/log/nginx/access.log|awk '{print $9}'|sort |uniq -c|sort -rn|awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$1","$2",7"}'
     fi
+}
+
+#k8s stat info-------------------------------------------------------------------------------------------------
+func_k8s_etcd(){
+  CP1_IP=192.168.10.171
+  ETCD=`sudo etcdctl --cert-file /etc/etcd/ssl/etcd.pem --key-file /etc/etcd/ssl/etcd-key.pem --ca-file /etc/etcd/ssl/ca.pem --endpoints https://$CP1_IP:2379 cluster-health|grep member|grep healthy|wc -l`
+  # 3 is normal
+}
+
+func_k8s_calico(){
+  CALICO=`sudo coreos-k8s/calico/calicoctl node status|grep Established|wc -l`
+  # 3 is normal
+}
+
+func_k8s_cs(){
+  CS=`kubectl get cs |grep Healthy|wc -l`
+  # 5 is normal
+}
+
+func_k8s_nodes(){
+  NODES=`kubectl get nodes |grep Ready|wc -l`
+  # 3 is normal for 10.171
+}
+
+func_k8s_svc(){
+  SVC=`kubectl get svc --all-namespaces -o wide|wc -l`
+}
+
+func_k8s_pods(){
+  PODS=`kubectl get pods --all-namespaces -o wide|wc -l`
+}
+
+func_k8s_topnode(){
+  TOPNODE=`kubectl top node|sed 's/$/;/'|xargs`
+}
+
+func_k8s_toppod(){
+  TOPPOD=`kubectl top pod --all-namespaces|head -n 5|sed 's/$/;/'|xargs`
 }
