@@ -10,3 +10,4 @@ cd $HOME/monagent.client
 /usr/bin/python ./uploadmon.py upwebinfo  >./upwebinfo.log  2>>upload.err
 #/usr/bin/python ./uploadmon.py upbakinfo  >./upbakinfo.log  2>>upload.err
 /usr/bin/python ./uploadmon.py uperrinfo  >./uperrinfo.log  2>>upload.err
+/usr/bin/python ./uploadmon.py upk8sinfo  >./upk8sinfo.log  2>>upload.err

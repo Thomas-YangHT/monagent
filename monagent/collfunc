@@ -159,14 +159,32 @@ func_web(){
 }
 
 #k8s stat info-------------------------------------------------------------------------------------------------
+func_k8sinfo(){
+  func_TIMESTAMP
+  func_NETDEV
+  func_IP
+  flag=0
+  [ "$IP" = "192.168.10.171" ]  && flag=1 
+  [ "$IP" = "192.168.10.92" ]   && flag=1 
+  if [ $flag -eq 1 ];then  
+    func_k8s_etcd     &&  [ "$ETCD" ]    && echo "$TIMESTAMP,$IP,$ETCD,etcd"    || echo "$TIMESTAMP,$IP,0,etcd"
+    func_k8s_calico   &&  [ "$CALICO" ]  && echo "$TIMESTAMP,$IP,$CALICO,net"   || echo "$TIMESTAMP,$IP,0,net"
+    func_k8s_cs       &&  [ "$CS" ]      && echo "$TIMESTAMP,$IP,$CS,cs"        || echo "$TIMESTAMP,$IP,0,cs"
+    func_k8s_nodes    &&  [ "$NODES" ]   && echo "$TIMESTAMP,$IP,$NODES,nodes"  || echo "$TIMESTAMP,$IP,0,nodes"
+    func_k8s_svc      &&  [ "$SVC" ]     && echo "$TIMESTAMP,$IP,$SVC,svc"      || echo "$TIMESTAMP,$IP,0,svc"
+    func_k8s_pods     &&  [ "$PODS" ]    && echo "$TIMESTAMP,$IP,$PODS,pods"    || echo "$TIMESTAMP,$IP,0,pods"
+    func_k8s_topnode  &&  [ "$TOPNODE" ] && echo "$TIMESTAMP,$IP,$TOPNODE,topnode"  || echo "$TIMESTAMP,$IP,0,topnode"
+    func_k8s_toppod   &&  [ "$TOPPOD" ]  && echo "$TIMESTAMP,$IP,$TOPPOD,toppod"    || echo "$TIMESTAMP,$IP,0,toppod"
+  fi
+}
+
 func_k8s_etcd(){
-  CP1_IP=192.168.10.171
-  ETCD=`sudo etcdctl --cert-file /etc/etcd/ssl/etcd.pem --key-file /etc/etcd/ssl/etcd-key.pem --ca-file /etc/etcd/ssl/ca.pem --endpoints https://$CP1_IP:2379 cluster-health|grep member|grep healthy|wc -l`
+  ETCD=`kubectl get cs |grep etcd |grep Healthy|wc -l`
   # 3 is normal
 }
 
 func_k8s_calico(){
-  CALICO=`sudo coreos-k8s/calico/calicoctl node status|grep Established|wc -l`
+  CALICO=`sudo $HOME/coreos-k8s/calico/calicoctl node status|grep Established|wc -l`
   # 3 is normal
 }
 

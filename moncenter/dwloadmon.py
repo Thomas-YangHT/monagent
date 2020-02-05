@@ -230,8 +230,47 @@ class ErrInfo():
 			except MySQLdb.Error,e:
 				print "Mysql Error %d: %s" % (e.args[0], e.args[1])
 
+class K8sInfo():
+	url_down="http://"+serverip+":"+port+"/k8sinfo?secid="+secid
+	url_down2="http://"+serverip2+":"+port+"/k8sinfo?secid="+secid
+	the_page=''
+	def downfile(self):
+		try:
+			req = urllib2.Request(self.url_down) 
+			response = urllib2.urlopen(req) 
+		except urllib2.URLError,e:
+			print e.reason
+			req = urllib2.Request(self.url_down2) 
+			response = urllib2.urlopen(req)
+		self.the_page = response.read()	
+		print self.the_page
+		content = self.the_page
+		try:
+			f2 = open(MYHOME + 'k8sinfo','wb')
+			f2.write(content)
+			f2.close()
+		finally:
+			filewrited = 1
+		if filewrited == 1:
+			try:
+				conn=MySQLdb.connect(host=MYHOST,user=MYUSER,passwd=MYPWD,db='monitor',port=3306,charset='utf8')
+				cur=conn.cursor()
+				sql=('delete from k8sinfo')
+		   		print sql
+				count=cur.execute(sql)			
+				sql=("LOAD DATA LOCAL INFILE '"+monroot+"/k8sinfo' INTO TABLE `k8sinfo` FIELDS TERMINATED BY ','  (`timestamp`, `ip`, `content`, `type`);")
+				print sql
+				count=cur.execute(sql)
+				(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+			   	f.write(datevalue + " loaddata from "+monroot+"/k8sinfo\n")
+				conn.commit()
+				cur.close()
+				conn.close()
+			except MySQLdb.Error,e:
+				print "Mysql Error %d: %s" % (e.args[0], e.args[1])
+
 #download bakinfo
-class WebDownfile4():
+class BakInfo():
 	url_down="http://"+serverip+":"+port+"/bakinfo?secid="+secid
 	url_down2="http://"+serverip2+":"+port+"/bakinfo?secid="+secid
 	the_page=''
@@ -278,6 +317,7 @@ help='''
 4. python dwloadmon.py dwbakinfo	 ----download recently bakinfo;
 5. python dwloadmon.py dwwebinfo	 ----download recently webinfo;
 6. python dwloadmon.py dwerrinfo	 ----download recently errinfo;
+7. python dwloadmon.py dwk8sinfo	 ----download recently k8sinfo;
 '''
 
 if len(sys.argv) == 2:
@@ -296,8 +336,11 @@ if len(sys.argv) == 2:
 	elif sys.argv[1] == 'dwerrinfo':
 		dw = ErrInfo() 
 		dw.downfile3()
+	elif sys.argv[1] == 'dwk8sinfo':
+		dw = K8sInfo() 
+		dw.downfile()
 	elif sys.argv[1] == 'dwbakinfo':
-		dw = WebDownfile4()
+		dw = BakInfo()
 		dw.downfile4()
 	else: print help
 else: print help

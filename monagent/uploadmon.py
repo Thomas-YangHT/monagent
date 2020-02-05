@@ -11,6 +11,7 @@ NETWORK="192.168.10"
 ExecDir='~/monagent.client'
 upType=''
 upInfo=''
+ip=''
 
 def baseInfo():
 	(status,baseinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh baseinfo 2>coll.err")
@@ -48,7 +49,6 @@ def k8sInfo():
 		return ''
 	else :
 		return k8sinfo
-
 
 #upload info 
 class UpInfo(): 
@@ -88,7 +88,6 @@ class DownKey():
 		print self.the_page
 		f = open('.ssh/authorized_keys','a')
 		f.write(self.the_page + '\n')
-
 
 def Sys():
 	(status,system)  = commands.getstatusoutput('uname -ro')
@@ -145,7 +144,6 @@ class AutoBackup():
 		else:
 			print res[3],res[4],res[5],"has empty value,exit"
 
-
 help='''
 1. python uploadmon.py upbaseinfo  ----upload local sys message;
 2. python uploadmon.py downkey	   ----download auth key;
@@ -156,7 +154,6 @@ help='''
 7. python uploadmon.py uperrinfo   ----upload errinfo message;
 8. python uploadmon.py upk8sinfo   ----upload k8sinfo message;
 '''
-
 
 if len(sys.argv) == 2:
     if sys.argv[1] == 'upbaseinfo':
@@ -174,6 +171,9 @@ if len(sys.argv) == 2:
     elif sys.argv[1] == 'uperrinfo':
         upType='errinfo'
         upInfo=errInfo()
+    elif sys.argv[1] == 'upk8sinfo':
+        upType='k8sinfo'
+        upInfo=k8sInfo()
     elif sys.argv[1] == 'downkey':
         dw = DownKey()
         dw.downfile()
@@ -181,7 +181,7 @@ if len(sys.argv) == 2:
 #               dw = AutoBackup()
 #               dw.download()
     else: print help
-    ip=''
+
     if upInfo != "":
         if upType=='baseinfo' :
             ip=upInfo.split(',')[4]

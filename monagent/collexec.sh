@@ -66,17 +66,7 @@ webinfo)
   func_web
 ;;
 k8sinfo)
-  func_TIMESTAMP
-  func_NETDEV
-  func_IP
-  func_k8s_etcd     &&  [ "$ETCD" ]    && echo "$TIMESTAMP,$IP,$ETCD,etcd"    || echo "$TIMESTAMP,$IP,0,etcd"
-  func_k8s_calico   &&  [ "$CALICO" ]  && echo "$TIMESTAMP,$IP,$CALICO,net"   || echo "$TIMESTAMP,$IP,0,net"
-  func_k8s_cs       &&  [ "$CS" ]      && echo "$TIMESTAMP,$IP,$CS,cs"        || echo "$TIMESTAMP,$IP,0,cs"
-  func_k8s_nodes    &&  [ "$NODES" ]   && echo "$TIMESTAMP,$IP,$NODES,nodes"  || echo "$TIMESTAMP,$IP,0,nodes"
-  func_k8s_svc      &&  [ "$SVC" ]     && echo "$TIMESTAMP,$IP,$SVC,svc"      || echo "$TIMESTAMP,$IP,0,svc"
-  func_k8s_pods     &&  [ "$PODS" ]    && echo "$TIMESTAMP,$IP,$PODS,pods"    || echo "$TIMESTAMP,$IP,0,pods"
-  func_k8s_topnode  &&  [ "$TOPNODE" ] && echo "$TIMESTAMP,$IP,$TOPNODE,topnode"  || echo "$TIMESTAMP,$IP,0,topnode"
-  func_k8s_toppod   &&  [ "$TOPPOD" ]  && echo "$TIMESTAMP,$IP,$TOPPOD,toppod"    || echo "$TIMESTAMP,$IP,0,toppod"
+  func_k8sinfo
 ;;
 1|os)
   func_OS &&   echo $sys

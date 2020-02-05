@@ -98,6 +98,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             DownFiles=['id_rsa.pub','md5.txt','uploadmon.py','fileUpdate.py','collexec.sh','collfunc','collconf','collcron.sh','instmon.sh','baksetting']
             DownFiles.append('bakinfo')
             DownFiles.append('baseinfo')
+            DownFiles.append('k8sinfo')
             DownIpFiles = ['moninfo','portinfo','webinfo','errinfo']
             for  dwfile in DownFiles :
                 if src == '/' + dwfile + '?secid='+secid :
@@ -140,7 +141,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             
             for key in dicmess:
                 print key,dicmess[key]
-            UpFiles=['baseinfo','baksetting','bakinfo']
+            UpFiles=['baseinfo','baksetting','bakinfo','k8sinfo']
             UpIpFiles=['moninfo','portinfo','webinfo','errinfo']
             for uf in UpFiles :           
                 if dicmess['secid'] == secid and dicmess['type'] == uf :
