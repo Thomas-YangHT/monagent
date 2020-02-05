@@ -56,10 +56,10 @@ errinfo)
   func_TIMESTAMP
   func_NETDEV
   func_IP
-  func_MegaERR   &&  [ "$MegaERR" ]  && echo "$TIMESTAMP,$IP,$MegaERR,disk"    || echo "$TIMESTAMP,$IP,0,disk"
-  func_ipmievent &&  [ "IpmiEvent" ] && echo "$TIMESTAMP,$IP,$IpmiEvent,ipmi"  || echo "$TIMESTAMP,$IP,0,ipmi"
-  func_CollErr   &&  [ "CollErr" ]   && echo "$TIMESTAMP,$IP,$CollErr,coll"    || echo "$TIMESTAMP,$IP,0,coll"
-  func_UploadErr &&  [ "UploadErr" ] && echo "$TIMESTAMP,$IP,$UploadErr,Upload"|| echo "$TIMESTAMP,$IP,0,Upload"
+  [ "`df -h|grep "/dev/sd"`" ] && func_MegaERR  && [ "$MegaERR" ] && echo "$TIMESTAMP,$IP,$MegaERR,disk"  || echo "$TIMESTAMP,$IP,0,disk"
+  func_ipmievent &&  [ "$IpmiEvent" ] && echo "$TIMESTAMP,$IP,$IpmiEvent,ipmi"  || echo "$TIMESTAMP,$IP,0,ipmi"
+  func_CollErr   &&  [ "$CollErr" ]   && echo "$TIMESTAMP,$IP,$CollErr,coll"    || echo "$TIMESTAMP,$IP,0,coll"
+  func_UploadErr &&  [ "$UploadErr" ] && echo "$TIMESTAMP,$IP,$UploadErr,Upload"|| echo "$TIMESTAMP,$IP,0,Upload"
 ;;
 webinfo)
   func_web
