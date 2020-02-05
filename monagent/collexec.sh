@@ -29,6 +29,7 @@ funcinfo=("$baseinfo" "$moninfo" "$portsinfo" "$bakinfo" "$errinfo" "$osInfo" "$
 #		bakinfo			备份信息
 #		errinfo			错误信息：如硬盘故障、内存故障、风扇电源故障、系统故障等
 #   webinfo     访问信息：WEB访问量等
+#   k8sinfo     k8s
 case $1 in
 baseinfo)
   func_baseinfo

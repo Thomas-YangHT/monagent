@@ -9,6 +9,8 @@ port="18000"
 monroot="./"
 NETWORK="192.168.10"
 ExecDir='~/monagent.client'
+upType=''
+upInfo=''
 
 def baseInfo():
 	(status,baseinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh baseinfo 2>coll.err")
@@ -29,7 +31,7 @@ def bakInfo():
 def errInfo():
 	(status,errinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh errinfo 2>>coll.err")
 	if status != 0 :
-		return 0
+		return ''
 	else :
 		return errinfo
 
@@ -39,6 +41,43 @@ def webInfo():
 		return ''
 	else :
 		return webinfo
+
+#upload info 
+class UpInfo(): 
+	url_Upload="http://"+serverip+":"+port 
+	if serverip2 != "" :
+		url_Upload="http://"+serverip2+":"+port 	
+	secidd=secid
+	typename=upType
+	#(ip,netmask)=GetIp()
+	info=upInfo
+	ip=''
+	if info != "":
+		if typename=='baseinfo' :
+			ip=info.split(',')[4]
+		else:
+			ip=info.split(',')[1]
+	the_page = '' 
+	def Upload(self): 
+		values = {
+		'secid' : self.secidd,
+		'type'  : self.typename,
+		'info'  : self.info,
+		'ip'    : self.ip, 
+		} 
+		print values
+		print self.url_Upload
+		if self.ip != '' :
+			postdata = urllib.urlencode(values) 
+			req = urllib2.Request(self.url_Upload, postdata) 
+			response = urllib2.urlopen(req,timeout=5)
+			self.the_page = response.read()
+		if serverip2 != "" :
+			print "server2 uploading..."
+			req = urllib2.Request(self.url_Upload, postdata) 
+			response = urllib2.urlopen(req)
+			self.the_page = response.read()			
+		print self.the_page
 
 #upload webinfo 
 class WebInfo(): 
@@ -281,23 +320,21 @@ help='''
 
 if len(sys.argv) == 2:
 	if sys.argv[1] == 'upbaseinfo':
-		web=BaseInfo()
-		web.Upload()
+		upType='baseinfo'
+		upInfo=baseInfo()
 	elif sys.argv[1] == 'upmoninfo':
-		web=MonInfo()
-		web.Upload()		
+		upType='moninfo'
+		upInfo=monInfo()
 	elif sys.argv[1] == 'upportinfo':
-		web=PortInfo()
-		web.Upload()	
+		upType='portinfo'
+		upInfo=portInfo()
 	elif sys.argv[1] == 'upwebinfo':
-		web=WebInfo()
-		web.Upload()	
+		upType='webinfo'
+		upInfo=webInfo()
 	elif sys.argv[1] == 'uperrinfo':
-		web=ErrInfo()
-		web.Upload()	
+		upType='errinfo'
+		upInfo=errInfo()
 #	elif sys.argv[1] == 'upbakinfo':
-#		web=BakInfo()
-#		web.Upload()	
 	elif sys.argv[1] == 'downkey':
 		dw = DownKey()
 		dw.downfile()
@@ -305,4 +342,7 @@ if len(sys.argv) == 2:
 #		dw = AutoBackup()
 #		dw.download()	
 	else: print help
+	if uptype!='' :
+		web=UpInfo()
+		web.Upload()
 else: print help

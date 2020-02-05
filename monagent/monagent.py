@@ -152,7 +152,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                         f2 = open('/root/log/'+uf,'a')
                     else:
                         f2 = open('/root/log/'+uf,'wb')
-                    content = dicmess[uf]
+                    content = dicmess['info']
                     if dicmess['type'] == 'baksetting' :
                         fds=content.split(',')
                         content=''
@@ -169,7 +169,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                         f3 = open(filename,'a')
                     else:
                         f3 = open(filename,'wb')
-                    content=dicmess[uf]  
+                    content=dicmess['info']  
                     f3.write(content + '\n')
             if content == '' :
                 print 'incorrect secid or type'
