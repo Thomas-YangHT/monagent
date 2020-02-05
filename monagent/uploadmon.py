@@ -342,7 +342,7 @@ if len(sys.argv) == 2:
 #		dw = AutoBackup()
 #		dw.download()	
 	else: print help
-	if uptype!='' :
+	if upType!='' :
 		web=UpInfo()
 		web.Upload()
 else: print help
