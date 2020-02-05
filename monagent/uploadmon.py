@@ -42,32 +42,30 @@ def webInfo():
 	else :
 		return webinfo
 
+def k8sInfo():
+	(status,k8sinfo) = commands.getstatusoutput("cd "+ExecDir+";bash collexec.sh k8sinfo 2>>coll.err")
+	if status != 0 :
+		return ''
+	else :
+		return k8sinfo
+
+
 #upload info 
 class UpInfo(): 
 	url_Upload="http://"+serverip+":"+port 
 	if serverip2 != "" :
 		url_Upload="http://"+serverip2+":"+port 	
-	secidd=secid
-	typename=upType
-	#(ip,netmask)=GetIp()
-	info=upInfo
-	ip=''
-	if info != "":
-		if typename=='baseinfo' :
-			ip=info.split(',')[4]
-		else:
-			ip=info.split(',')[1]
 	the_page = '' 
 	def Upload(self): 
 		values = {
-		'secid' : self.secidd,
-		'type'  : self.typename,
-		'info'  : self.info,
-		'ip'    : self.ip, 
+		'secid' : secid,
+		'type'  : upType,
+		'info'  : upInfo,
+		'ip'    : ip, 
 		} 
 		print values
 		print self.url_Upload
-		if self.ip != '' :
+		if ip != '' :
 			postdata = urllib.urlencode(values) 
 			req = urllib2.Request(self.url_Upload, postdata) 
 			response = urllib2.urlopen(req,timeout=5)
@@ -77,165 +75,6 @@ class UpInfo():
 			req = urllib2.Request(self.url_Upload, postdata) 
 			response = urllib2.urlopen(req)
 			self.the_page = response.read()			
-		print self.the_page
-
-#upload webinfo 
-class WebInfo(): 
-	url_Upload="http://"+serverip+":"+port 
-	if serverip2 != "" :
-		url_Upload="http://"+serverip2+":"+port 	
-	secidd=secid
-	typename='webinfo'
-	#(ip,netmask)=GetIp()
-	webinfo=webInfo()
-	ip=''
-	if webinfo != "":
-		ip=webinfo.split(',')[1]
-	the_page = '' 
-	def Upload(self): 
-		values = {
-		'secid' : self.secidd,
-		'type'  : self.typename,
-		'webinfo'  : self.webinfo,
-		'ip'    : self.ip, 
-		} 
-		print values
-		print self.url_Upload
-		if self.ip != '' :
-			postdata = urllib.urlencode(values) 
-			req = urllib2.Request(self.url_Upload, postdata) 
-			response = urllib2.urlopen(req,timeout=5)
-			self.the_page = response.read()
-		if serverip2 != "" :
-			print "server2 uploading..."
-			req = urllib2.Request(self.url_Upload, postdata) 
-			response = urllib2.urlopen(req)
-			self.the_page = response.read()			
-		print self.the_page
-
-#upload errInfo
-class ErrInfo(): 
-	url_Upload="http://"+serverip+":"+port 
-	if serverip2 != "" :
-		url_Upload="http://"+serverip2+":"+port 	
-	secidd=secid
-	typename='errinfo'
-	errinfo=errInfo()
-	ip=''
-	if errinfo != "":
-		ip=errinfo.split(',')[1]
-	the_page = '' 
-	def Upload(self): 
-		values = {
-		'secid' : self.secidd,
-		'type'  : self.typename,
-		'errinfo'  : self.errinfo,
-		'ip'    : self.ip, 
-		} 
-		print values
-		print self.url_Upload
-		postdata = urllib.urlencode(values) 
-		req = urllib2.Request(self.url_Upload, postdata) 
-		response = urllib2.urlopen(req,timeout=5)
-		self.the_page = response.read()
-		if serverip2 != "" :
-			print "server2 uploading..."
-			req = urllib2.Request(self.url_Upload, postdata) 
-			response = urllib2.urlopen(req)
-			self.the_page = response.read()			
-		print self.the_page
-
-#upload portinfo (self's port process message)
-class PortInfo(): 
-	url_Upload="http://"+serverip+":"+port 
-	if serverip2 != "" :
-		url_Upload="http://"+serverip2+":"+port 	
-	secidd=secid
-	typename='portinfo'
-	portinfo=portInfo()
-	#TIIMESTAMP, IP, PROTOCOL, IPL, Port, PID, Procname
-	ip=portinfo.split(',')[1]
-	the_page = '' 
-	def Upload(self): 
-		values = {
-		'secid' : self.secidd,
-		'type'  : self.typename,
-		'portinfo'  : self.portinfo,
-		'ip'    : self.ip, 
-		} 
-		print values
-		print self.url_Upload
-		postdata = urllib.urlencode(values) 
-		req = urllib2.Request(self.url_Upload, postdata) 
-		response = urllib2.urlopen(req,timeout=5)
-		self.the_page = response.read()
-		if serverip2 != "" :
-			print "server2 uploading..."
-			req = urllib2.Request(self.url_Upload, postdata) 
-			response = urllib2.urlopen(req)
-			self.the_page = response.read()			
-		print self.the_page
-
-#upload moninfo (self's monitor message)
-class MonInfo(): 
-	url_Upload="http://"+serverip+":"+port
-	if serverip2 != "" :
-		url_Upload="http://"+serverip2+":"+port	 
-	secidd=secid
-	typename='moninfo'
-	moninfo=monInfo()
-	#TIMESTAMP, IP, CPUIDLE, MEMTOTAL, MEMUSED, RX, TX, DISKROOTUSAGE, IOAWAIT, IOUTIL
-	ip=moninfo.split(',')[1]
-	the_page = '' 
-	def Upload(self): 
-		values = {
-		'secid' : self.secidd,
-		'type'  : self.typename,
-		'moninfo' : self.moninfo,
-		'ip' : self.ip,
-		} 
-		print values
-		print self.url_Upload
-		postdata = urllib.urlencode(values) 
-		req = urllib2.Request(self.url_Upload, postdata) 
-		response = urllib2.urlopen(req)
-		self.the_page = response.read()
-		if serverip2 != '' :
-			print "server2 uploading..."			
-			req = urllib2.Request(self.url_Upload, postdata) 
-			response = urllib2.urlopen(req)
-			self.the_page = response.read()		
-		print self.the_page
-
-#upload baseinfo (self's configure)
-class BaseInfo(): 
-	url_Upload="http://"+serverip+":"+port 
-	if serverip2 != "" :
-		url_Upload="http://"+serverip2+":"+port	
-	secidd=secid
-	typename='baseinfo'
-	baseinfo=baseInfo()
-	ip=baseinfo.split(',')[4]
-    #echo $HOSTNAME, $KERNEL, $TZ, $MAC, $IP, $CPU, $MEMORY, $DISK, $SERIESNO
-	the_page = '' 
-	def Upload(self): 
-		values = {
-		'secid' : self.secidd,
-		'type'  : self.typename,
-		'baseinfo' : self.baseinfo,
-		'ip' : self.ip,
-		} 
-		print values
-		print self.url_Upload
-		postdata = urllib.urlencode(values) 
-		req = urllib2.Request(self.url_Upload, postdata) 
-		response = urllib2.urlopen(req)
-		self.the_page = response.read()
-		if serverip2 != "" :
-			print "server2 uploading..."			
-			req = urllib2.Request(self.url_Upload, postdata) 
-			response = urllib2.urlopen(req)
-			self.the_page = response.read()		
 		print self.the_page
 
 #download pub key
@@ -307,7 +146,6 @@ class AutoBackup():
 			print res[3],res[4],res[5],"has empty value,exit"
 
 
-
 help='''
 1. python uploadmon.py upbaseinfo  ----upload local sys message;
 2. python uploadmon.py downkey	   ----download auth key;
@@ -316,33 +154,40 @@ help='''
 5. python uploadmon.py upportinfo  ----upload portinfo message;
 6. python uploadmon.py upwebinfo   ----upload webinfo message;
 7. python uploadmon.py uperrinfo   ----upload errinfo message;
+8. python uploadmon.py upk8sinfo   ----upload k8sinfo message;
 '''
 
+
 if len(sys.argv) == 2:
-	if sys.argv[1] == 'upbaseinfo':
-		upType='baseinfo'
-		upInfo=baseInfo()
-	elif sys.argv[1] == 'upmoninfo':
-		upType='moninfo'
-		upInfo=monInfo()
-	elif sys.argv[1] == 'upportinfo':
-		upType='portinfo'
-		upInfo=portInfo()
-	elif sys.argv[1] == 'upwebinfo':
-		upType='webinfo'
-		upInfo=webInfo()
-	elif sys.argv[1] == 'uperrinfo':
-		upType='errinfo'
-		upInfo=errInfo()
-#	elif sys.argv[1] == 'upbakinfo':
-	elif sys.argv[1] == 'downkey':
-		dw = DownKey()
-		dw.downfile()
-#	elif sys.argv[1] == 'dwbakinfo':
-#		dw = AutoBackup()
-#		dw.download()	
-	else: print help
-	if upType!='' :
-		web=UpInfo()
-		web.Upload()
+    if sys.argv[1] == 'upbaseinfo':
+        upType='baseinfo'
+        upInfo=baseInfo()
+    elif sys.argv[1] == 'upmoninfo':
+        upType='moninfo'
+        upInfo=monInfo()
+    elif sys.argv[1] == 'upportinfo':
+        upType='portinfo'
+        upInfo=portInfo()
+    elif sys.argv[1] == 'upwebinfo':
+        upType='webinfo'
+        upInfo=webInfo()
+    elif sys.argv[1] == 'uperrinfo':
+        upType='errinfo'
+        upInfo=errInfo()
+    elif sys.argv[1] == 'downkey':
+        dw = DownKey()
+        dw.downfile()
+#       elif sys.argv[1] == 'dwbakinfo':
+#               dw = AutoBackup()
+#               dw.download()
+    else: print help
+    ip=''
+    if upInfo != "":
+        if upType=='baseinfo' :
+            ip=upInfo.split(',')[4]
+        else:
+            ip=upInfo.split(',')[1]
+    if upType != '' :
+        web=UpInfo()
+        web.Upload()
 else: print help
