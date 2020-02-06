@@ -36,9 +36,11 @@ jobs:
     - name: failed
       if: failure()
       run: |
+        cd $PN
         python sendmesstowx.py "build failed: https://github.com/Thomas-YangHT/monagent/new/master?filename=.github%2Fworkflows%2Fpythonapp.yml&workflow_template=pythonapp"
     - name: successed
       if: success()
       run: |
+        cd $PN
         python sendmesstowx.py "build successed"
 
