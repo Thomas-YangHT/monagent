@@ -103,9 +103,12 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             for  dwfile in DownFiles :
                 if src == '/' + dwfile + '?secid='+secid :
                     if src == '/baseinfo?secid='+secid :
-                        f1 = open('/root/log/baseinfo','rb')
+                        filename='/root/log/baseinfo'
+                    elif src == '/k8sinfo?secid='+secid :
+                        filename='/root/log/k8sinfo'
                     else:
-                        f1 = open(dwfile,'rb')
+                        filename=dwfile
+                    f1 = open(filename,'rb')
                     content = f1.read()
                     (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                     f.write(datevalue + ' download '+dwfile+' ' + self.client_address[0] + '\n')
@@ -122,7 +125,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 content = text_content
             self.request.sendall(content)
 
-        if method == 'POST':
+        elif method == 'POST':
             form = request.split('\r\n')
             #idx = form.index('')             # Find the empty line
             #entry = form[idx:]               # Main content of the request
