@@ -144,7 +144,10 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             UpFiles=['baseinfo','baksetting','bakinfo','k8sinfo']
             UpIpFiles=['moninfo','portinfo','webinfo','errinfo']
             if dicmess['secid'] == secid and dicmess['type'] == 'sendtowx' :
+                self.request.sendall(return_content)
                 (status,novalue) = commands.getstatusoutput('python sendmesstowx.py '+dicmess['info'])
+                print 'status:',status,novalue
+                content='sendtowx'
             else:
                 for uf in UpFiles :           
                     if dicmess['secid'] == secid and dicmess['type'] == uf :
