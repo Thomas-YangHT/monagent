@@ -143,39 +143,44 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 print key,dicmess[key]
             UpFiles=['baseinfo','baksetting','bakinfo','k8sinfo']
             UpIpFiles=['moninfo','portinfo','webinfo','errinfo']
-            for uf in UpFiles :           
-                if dicmess['secid'] == secid and dicmess['type'] == uf :
-                    self.request.sendall(return_content)
-                    (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
-                    (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/'+uf+' ];then touch /root/log/'+uf+'; fi')
-                    (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/'+uf+'\`;if [ ! -n "${trueth}" ]; then sed -i \'/'+dicmess['ip']+'/d\' /root/log/'+uf+'; fi')
-                    if dicmess['type'] == 'baseinfo' :
-                        f2 = open('/root/log/'+uf,'a')
-                    else:
-                        f2 = open('/root/log/'+uf,'wb')
-                    content = dicmess['info']
-                    if dicmess['type'] == 'baksetting' :
-                        fds=content.split(',')
-                        content=''
-                        for i in range(len(fds)/4) :
-                            content += fds[i*4] +','+ fds[i*4+1] +','+ fds[i*4+2] +','+ fds[i*4+3] + "\n"
-                    f2.write(content + '\n')
-            for uf in UpIpFiles :
-                if dicmess['secid'] == secid and dicmess['type'] == uf :
-                    self.request.sendall(return_content)
-                    filename='/root/log/' + uf + dicmess['ip']+'.log'
-                    (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
-                    (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
-                    if dicmess['type'] == 'moninfo' :
-                        f3 = open(filename,'a')
-                    else:
-                        f3 = open(filename,'wb')
-                    content=dicmess['info']  
-                    f3.write(content + '\n')
+            if dicmess['secid'] == secid and dicmess['type'] == 'sendtowx' :
+                (status,novalue) = commands.getstatusoutput('python sendmesstowx.py '+dicmess['info'])
+            else:
+                for uf in UpFiles :           
+                    if dicmess['secid'] == secid and dicmess['type'] == uf :
+                        self.request.sendall(return_content)
+                        (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
+                        (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/'+uf+' ];then touch /root/log/'+uf+'; fi')
+                        (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/'+uf+'\`;if [ ! -n "${trueth}" ]; then sed -i \'/'+dicmess['ip']+'/d\' /root/log/'+uf+'; fi')
+                        if dicmess['type'] == 'baseinfo' :
+                            f2 = open('/root/log/'+uf,'a')
+                        else:
+                            f2 = open('/root/log/'+uf,'wb')
+                        content = dicmess['info']
+                        if dicmess['type'] == 'baksetting' :
+                            fds=content.split(',')
+                            content=''
+                            for i in range(len(fds)/4) :
+                                content += fds[i*4] +','+ fds[i*4+1] +','+ fds[i*4+2] +','+ fds[i*4+3] + "\n"
+                        f2.write(content + '\n')
+                        break
+                else :
+                    for uf in UpIpFiles :
+                        if dicmess['secid'] == secid and dicmess['type'] == uf :
+                            self.request.sendall(return_content)
+                            filename='/root/log/' + uf + dicmess['ip']+'.log'
+                            (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
+                            (status,novalue) = commands.getstatusoutput('if [ ! -f '+filename+' ];then touch '+filename+'; fi')
+                            if dicmess['type'] == 'moninfo' :
+                                f3 = open(filename,'a')
+                            else:
+                                f3 = open(filename,'wb')
+                            content=dicmess['info']  
+                            f3.write(content + '\n')
+                            break
             if content == '' :
                 print 'incorrect secid or type'
 
-            
 # Create the server
 server = SocketServer.TCPServer((HOST, PORT), MyTCPHandler)
 #server = SocketServer.ThreadingTCPServer((HOST, PORT), MyTCPHandler)
