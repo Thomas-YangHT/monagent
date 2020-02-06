@@ -9,7 +9,5 @@ apk add  py2-urllib3 tzdata curl && \
 cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 #apk add  --no-cache nginx uwsgi uwsgi-python py-flask py-mysqlclient
 COPY . /monagent
-COPY ../sendmesstowx.py /monagent
-COPY ../sendwx.conf /monagent
 WORKDIR /monagent
 CMD ["python", "/monagent/monagent.py"]

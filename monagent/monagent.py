@@ -145,7 +145,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             UpIpFiles=['moninfo','portinfo','webinfo','errinfo']
             if dicmess['secid'] == secid and dicmess['type'] == 'sendtowx' :
                 self.request.sendall(return_content)
-                (status,novalue) = commands.getstatusoutput('python sendmesstowx.py '+dicmess['info'])
+                (status,novalue) = commands.getstatusoutput('python sendmesstowx.py "' + dicmess['info'] + '"')
                 print 'status:',status,novalue
                 content='sendtowx'
             else:
