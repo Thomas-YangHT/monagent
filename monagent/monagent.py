@@ -160,14 +160,16 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                         self.request.sendall(return_content)
                         (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                         (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/'+uf+' ];then touch /root/log/'+uf+'; fi')
-                        (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/'+uf+'\`;if [ ! -n "${trueth}" ]; then sed -i \'/'+dicmess['ip']+'/d\' /root/log/'+uf+'; fi')
                         if dicmess['type'] == 'baseinfo' :
+                            (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/'+uf+'\`;if [ ! -n "${trueth}" ]; then sed -i \'/'+dicmess['ip']+'/d\' /root/log/'+uf+'; fi')
                             f2 = open('/root/log/'+uf,'a')
                         else:
                             f2 = open('/root/log/'+uf,'wb')
                         if dicmess['type'] == 'baksetting' or dicmess['type'] == 'labelset':
                             content = dicmess['setting']
                             fds=content.split(',')
+                            print content
+                            print fds
                             content=''
                             if dicmess['type'] == 'baksetting' :
                                 for i in range(len(fds)/4) :
