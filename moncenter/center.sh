@@ -6,3 +6,4 @@ python ${ProgDIR}/dwloadmon.py dwportinfo
 python ${ProgDIR}/dwloadmon.py dwwebinfo
 python ${ProgDIR}/dwloadmon.py dwerrinfo
 python ${ProgDIR}/dwloadmon.py dwk8sinfo
+python ${ProgDIR}/upsetting.py label

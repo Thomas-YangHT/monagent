@@ -108,6 +108,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                         filename='/root/log/baseinfo'
                     elif src == '/k8sinfo?secid='+secid :
                         filename='/root/log/k8sinfo'
+                    elif src == '/labelset?secid='+secid :
+                        filename='/root/log/labelset'                   
                     else:
                         filename=dwfile
                     f1 = open(filename,'rb')
