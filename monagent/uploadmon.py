@@ -118,9 +118,7 @@ def GetIp():
 
 #download self IP's BACKUP configure
 class AutoBackup():
-	system=Sys()
 	(ip,netmask)=GetIp()
-		
 	url_down='http://'+serverip+':'+port+'/downloadmessage?secid='+secid+'&download='+ip
 	the_page=''
 	def download(self):

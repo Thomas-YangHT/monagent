@@ -95,10 +95,12 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             else:   
                 mess1  = str1[1].split('&')
                 tmp1   = mess1[0].split('=')
-            DownFiles=['id_rsa.pub','md5.txt','uploadmon.py','fileUpdate.py','collexec.sh','collfunc','collconf','collcron.sh','instmon.sh','baksetting']
+            DownFiles = ['id_rsa.pub','md5.txt','uploadmon.py','fileUpdate.py','collexec.sh','collfunc','collconf','collcron.sh','instmon.sh']
             DownFiles.append('bakinfo')
             DownFiles.append('baseinfo')
             DownFiles.append('k8sinfo')
+            DownFiles.append('baksetting')
+            DownFiles.append('labelset')
             DownIpFiles = ['moninfo','portinfo','webinfo','errinfo']
             for  dwfile in DownFiles :
                 if src == '/' + dwfile + '?secid='+secid :
@@ -112,15 +114,16 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                     content = f1.read()
                     (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
                     f.write(datevalue + ' download '+dwfile+' ' + self.client_address[0] + '\n')
-            for dwfile in DownIpFiles :
-                if src == '/' + dwfile + '?secid='+secid :
-                    if src == '/moninfo?secid='+secid :
-                        (status,getinfo) = commands.getstatusoutput('find /root/log/moninfo* -exec tail -n 1 {} \;')
-                    else:
-                        (status,getinfo) = commands.getstatusoutput('find /root/log/'+dwfile+'* -exec cat {} \;')
-                    content = getinfo
-                    (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-                    f.write(datevalue + ' download '+dwfile+' ' + self.client_address[0] + '\n')
+            else:
+                for dwfile in DownIpFiles :
+                    if src == '/' + dwfile + '?secid='+secid :
+                        if src == '/moninfo?secid='+secid :
+                            (status,getinfo) = commands.getstatusoutput('find /root/log/moninfo* -exec tail -n 1 {} \;')
+                        else :
+                            (status,getinfo) = commands.getstatusoutput('find /root/log/'+dwfile+'* -exec cat {} \;')
+                        content = getinfo
+                        (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+                        f.write(datevalue + ' download '+dwfile+' ' + self.client_address[0] + '\n')
             if content == '' :  
                 content = text_content
             self.request.sendall(content)

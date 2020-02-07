@@ -6,7 +6,7 @@ import sys,urllib,urllib2
 #modify these item to suit your monitor system:
 
 monroot="."             #the directory of mysql server think
-MYHOME='./'             #the directory used for sql "LOAD DATA LOCAL INFILE...", modified as .  no need mount 
+MYHOME='./'             #the directory used for sql "LOAD DATA LOCAL INFILE..."
 f = open('./server8000.log','a')
 
 def readConf():

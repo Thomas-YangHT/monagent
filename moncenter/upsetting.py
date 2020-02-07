@@ -40,8 +40,6 @@ def readMysql(SQL):
 			#result=result.strip()
 			result=result.replace('\r','').replace('\\N','none')
 			print "result:\n",result
-		(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
-		f.write(datevalue + " upbaksetting to agent\n")
 		conn.commit()
 		cur.close()
 		conn.close()
@@ -68,6 +66,10 @@ class UpSetting():
 		response = urllib2.urlopen(req)
 		self.the_page = response.read()
 		#print self.the_page
+		(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
+		f = open('./upseting.log','a')
+		f.write(datevalue + " up "+typename+" to agent\n")
+		f.close()
 
 help='''
 1. python upsetting.py bak   ----upload bak setting;
