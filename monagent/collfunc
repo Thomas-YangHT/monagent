@@ -137,8 +137,15 @@ func_web(){
     func_NETDEV
     func_IP
     flag=0
-    [ "$IP" = "192.168.10.28" ] && web=llzg.com && flag=1 
-    [ "$IP" = "192.168.10.40" ] && web=llzg.cn  && flag=1 
+    while read sip label 
+    do
+       [ "$IP" = "$sip" ] && [ "$label" = "llzg.com" ] && flag=1 && web=$label
+       [ "$IP" = "$sip" ] && [ "$label" = "llzg.cn" ]  && flag=1 && web=$label       
+    done<<EOF
+ `cat labelset |sed -e 's/ //g' -e 's/,/ /'`
+EOF
+    #[ "$IP" = "192.168.10.28" ] && web=llzg.com && flag=1 
+    #[ "$IP" = "192.168.10.40" ] && web=llzg.cn  && flag=1 
     if [ $flag -eq 1 ];then
       #总访问量 class=1
       more /var/log/nginx/access.log|wc -l |awk -v timestamp="$TIMESTAMP" -v ip=$IP -v web=$web '{print timestamp","ip","web","$0",total.pv,1"}'
@@ -164,8 +171,14 @@ func_k8sinfo(){
   func_NETDEV
   func_IP
   flag=0
-  [ "$IP" = "192.168.10.171" ]  && flag=1 
-  [ "$IP" = "192.168.10.92" ]   && flag=1 
+  while read sip label 
+  do
+     [ $IP = $sip ] && [ $label = "k8smaster1" ] && flag=1
+  done<<EOF
+ `cat labelset |sed -e 's/ //g' -e 's/,/ /'`
+EOF
+  #[ "$IP" = "192.168.10.171" ]  && flag=1 
+  #[ "$IP" = "192.168.10.92" ]   && flag=1 
   if [ $flag -eq 1 ];then  
     func_k8s_etcd     &&  [ "$ETCD" ]    && echo "$TIMESTAMP,$IP,$ETCD,etcd"    || echo "$TIMESTAMP,$IP,0,etcd"
     func_k8s_calico   &&  [ "$CALICO" ]  && echo "$TIMESTAMP,$IP,$CALICO,net"   || echo "$TIMESTAMP,$IP,0,net"
@@ -213,3 +226,4 @@ func_k8s_topnode(){
 func_k8s_toppod(){
   TOPPOD=`kubectl top pod --all-namespaces|head -n 5|sed 's/$/;/'|xargs`
 }
+
