@@ -60,7 +60,7 @@ class UpInfo():
 		values = {
 		'secid' : secid,
 		'type'  : upType,
-		'info'  : upInfo,
+		'info'  : upInfo.replace('=',' '),
 		'ip'    : ip, 
 		} 
 		print values
