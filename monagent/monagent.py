@@ -144,7 +144,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             
             for key in dicmess:
                 print key,dicmess[key]
-            UpFiles=['baseinfo','baksetting','bakinfo','k8sinfo']
+            UpFiles=['baseinfo','bakinfo','k8sinfo','baksetting','labelset']
             UpIpFiles=['moninfo','portinfo','webinfo','errinfo']
             if dicmess['secid'] == secid and dicmess['type'] == 'sendtowx' :
                 self.request.sendall(return_content)
@@ -162,12 +162,18 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                             f2 = open('/root/log/'+uf,'a')
                         else:
                             f2 = open('/root/log/'+uf,'wb')
-                        content = dicmess['info']
-                        if dicmess['type'] == 'baksetting' :
+                        if dicmess['type'] == 'baksetting' or dicmess['type'] == 'labelset':
+                            content = dicmess['setting']
                             fds=content.split(',')
                             content=''
-                            for i in range(len(fds)/4) :
-                                content += fds[i*4] +','+ fds[i*4+1] +','+ fds[i*4+2] +','+ fds[i*4+3] + "\n"
+                            if dicmess['type'] == 'baksetting' :
+                                for i in range(len(fds)/4) :
+                                    content += fds[i*4] +','+ fds[i*4+1] +','+ fds[i*4+2] +','+ fds[i*4+3] + "\n"
+                            elif dicmess['type'] == 'labelset':
+                                for i in range(len(fds)/2) :
+                                    content += fds[i*2] +','+ fds[i*2+1] + "\n"
+                        else:
+                            content = dicmess['info']
                         f2.write(content + '\n')
                         break
                 else :
