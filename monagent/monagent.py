@@ -138,13 +138,13 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             #messages= MySQLdb.escape_string(form[-1]).split('&')
             #print request
             #messages= urllib.unquote(MySQLdb.escape_string(form[-1])).replace('+',' ').split('&')
-            head=form[0].split(' ')
+            head=form.split(' ')
             print head
-            if form[0].find("Content-Type: application/json") != -1: 
+            if form.find("Content-Type: application/json") != -1: 
                 CType='json'
             else: 
                 CType=''
-            if form[0].find("User-Agent: Grafana") != -1: 
+            if form.find("User-Agent: Grafana") != -1: 
                 alert='grafana'
             messages= urllib.unquote(form[-1]).replace('+',' ').split('&')
             messlen = len(messages)
