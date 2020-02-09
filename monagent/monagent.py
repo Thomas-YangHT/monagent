@@ -135,8 +135,11 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             #idx = form.index('')             # Find the empty line
             #entry = form[idx:]               # Main content of the request
             #messages= MySQLdb.escape_string(form[-1]).split('&')
-            print request
+            #print request
             #messages= urllib.unquote(MySQLdb.escape_string(form[-1])).replace('+',' ').split('&')
+            head=form[0].split(' ')
+            print head
+            if form[0].find("Content-Type: application/json"): print "json"
             messages= urllib.unquote(form[-1]).replace('+',' ').split('&')
             messlen = len(messages)
             print messlen
@@ -144,7 +147,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             dicmess={}
             for i in range(0,messlen):
                 tmp=messages[i].split('=')
-                dicmess.update({tmp[0]:tmp[1]})
+                if len(tmp)==2: dicmess.update({tmp[0]:tmp[1]})
+                else: print "tmp len incorrect:"+tmp
             print 'messages',messages
             
             for key in dicmess:
