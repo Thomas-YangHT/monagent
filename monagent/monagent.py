@@ -9,6 +9,7 @@ import SocketServer
 #import MySQLdb
 import sys,urllib,urllib2
 import time
+import json
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -139,17 +140,24 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             #messages= urllib.unquote(MySQLdb.escape_string(form[-1])).replace('+',' ').split('&')
             head=form[0].split(' ')
             print head
-            if form[0].find("Content-Type: application/json"): print "json"
+            if form[0].find("Content-Type: application/json"): CType='json'
+            else: CType=''
+            if form[0].find("User-Agent: Grafana"): alert='grafana'
             messages= urllib.unquote(form[-1]).replace('+',' ').split('&')
             messlen = len(messages)
             print messlen
             print messages
             dicmess={}
-            for i in range(0,messlen):
-                tmp=messages[i].split('=')
-                if len(tmp)==2: dicmess.update({tmp[0]:tmp[1]})
-                else: print "tmp len incorrect:"+tmp
-            print 'messages',messages
+            if CType=='json' and alert=='grafana':
+                dicjson=json.loads(messages)
+                dicmess.update({'info':dicjson['message']})
+                dicmess.update({'secid':secid})
+                dicmess.update({'type':'sendtowx'})
+            else:
+                for i in range(0,messlen):
+                    tmp=messages[i].split('=')
+                    if len(tmp)==2: dicmess.update({tmp[0]:tmp[1]})
+                    else: print "tmp len incorrect:"+tmp
             
             for key in dicmess:
                 print key,dicmess[key]
