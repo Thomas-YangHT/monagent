@@ -139,7 +139,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             #print request
             #messages= urllib.unquote(MySQLdb.escape_string(form[-1])).replace('+',' ').split('&')
             for strtmp in form:
-                print strcmp
+                print strtmp
                 if strtmp.find("Content-Type: application/json") != -1: 
                     CType='json'
                 else: 
