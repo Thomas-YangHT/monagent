@@ -55,7 +55,7 @@ class BaseInfo():
 			sql=("LOAD DATA LOCAL INFILE '"+monroot+"/baseinfo'  INTO TABLE monitor.basetmp  CHARACTER SET utf8  FIELDS TERMINATED BY ',' (`hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, `seriesno`);")
 			print sql
 			count=cur.execute(sql)
-			sql=("insert into monitor.baseinfo(`hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, `seriesno`)  select  `hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, `seriesno` from basetmp where ip not in (select ip from monitor.baseinfo)")
+			sql=("insert into monitor.baseinfo(`hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, `seriesno`)  select  `hostname`, `kernel`, `tz`, `mac`, `ip`, `cpu`, `memory`, `disk`, `seriesno` from basetmp where ip not in (select ip from monitor.baseinfo) and mac !=''")
 			print sql
 			count=cur.execute(sql)			 
 			(status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
