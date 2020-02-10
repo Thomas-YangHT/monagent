@@ -146,12 +146,16 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                     CType=''
                 if strtmp.find("User-Agent: Grafana") != -1: 
                     alert='grafana'
+                else:
+                    alert=''
             messages= urllib.unquote(form[-1]).replace('+',' ').split('&')
             messlen = len(messages)
             print messlen
             print messages
             dicmess={}
-            if CType=='json' and alert=='grafana':
+            print "CType:",CType
+            print "alert",alert
+            if CType == 'json' and alert == 'grafana':
                 dicjson=json.loads(messages)
                 dicmess.update({'info':dicjson['message']})
                 dicmess.update({'secid':secid})
