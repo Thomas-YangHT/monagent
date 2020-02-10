@@ -140,7 +140,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             #messages= urllib.unquote(MySQLdb.escape_string(form[-1])).replace('+',' ').split('&')
             dichead={}
             for strtmp in form:
-                tmp=strcmp.split(': ')
+                tmp=strtmp.split(': ')
                 if len(tmp)==2: dichead.update({tmp[0]:tmp[1]})
                 print "::",strtmp,strtmp.find("Content-Type: application/json"),strtmp.find("User-Agent: Grafana")
                 if strtmp.find("Content-Type: application/json") == 0 : 
