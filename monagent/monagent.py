@@ -139,27 +139,24 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             #print request
             #messages= urllib.unquote(MySQLdb.escape_string(form[-1])).replace('+',' ').split('&')
             dichead={}
+            CType=''
+            Alert=''
             for strtmp in form:
                 tmp=strtmp.split(': ')
                 if len(tmp)==2: dichead.update({tmp[0]:tmp[1]})
                 print "::",strtmp,strtmp.find("Content-Type: application/json"),strtmp.find("User-Agent: Grafana")
-                if strtmp.find("Content-Type: application/json") == 0 : 
-                    CType='json'
-                else: 
-                    CType=''
-                if strtmp.find("User-Agent: Grafana") != -1 : 
-                    alert='grafana'
-                else:
-                    alert=''
+                if strtmp.find("Content-Type: application/json") == 0 : CType='json'
+                if strtmp.find("User-Agent: Grafana") != -1 : Alert='grafana'
+
             print dichead
             print "CType:",CType
-            print "alert:",alert
+            print "Alert:",Alert
             messages= urllib.unquote(form[-1]).replace('+',' ').split('&')
             messlen = len(messages)
             print messlen
             print messages
             dicmess={}
-            if CType == 'json' and alert == 'grafana':
+            if CType == 'json' and Alert == 'grafana':
                 dicjson=json.loads(messages)
                 dicmess.update({'info':dicjson['message']})
                 dicmess.update({'secid':secid})
