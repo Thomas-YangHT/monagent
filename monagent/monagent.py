@@ -144,7 +144,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             for strtmp in form:
                 tmp=strtmp.split(': ')
                 if len(tmp)==2: dichead.update({tmp[0]:tmp[1]})
-                print "::",strtmp,strtmp.find("Content-Type: application/json"),strtmp.find("User-Agent: Grafana")
+                #print "::",strtmp,strtmp.find("Content-Type: application/json"),strtmp.find("User-Agent: Grafana")
                 if strtmp.find("Content-Type: application/json") == 0 : CType='json'
                 if strtmp.find("User-Agent: Grafana") != -1 : Alert='grafana'
 
@@ -184,7 +184,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                         self.request.sendall(return_content)
                         (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                         (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/'+uf+' ];then touch /root/log/'+uf+'; fi')
-                        if dicmess['type'] == 'baseinfo' :
+                        if dicmess['type'] == 'baseinfo' or dicmess['type'] == 'k8sinfo' :
                             (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/'+uf+'\`;if [ ! -n "${trueth}" ]; then sed -i \'/'+dicmess['ip']+'/d\' /root/log/'+uf+'; fi')
                             f2 = open('/root/log/'+uf,'a')
                         else:
