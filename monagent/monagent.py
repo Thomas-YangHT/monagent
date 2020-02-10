@@ -151,17 +151,19 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             print dichead
             print "CType:",CType
             print "Alert:",Alert
-            messages= urllib.unquote(form[-1]).replace('+',' ').split('&')
-            messlen = len(messages)
-            print messlen
-            print messages
+
             dicmess={}
             if CType == 'json' and Alert == 'grafana':
-                dicjson=json.loads(messages)
+                dicjson=json.loads(urllib.unquote(form[-1]).replace('+',' '))
                 dicmess.update({'info':dicjson['message']})
                 dicmess.update({'secid':secid})
                 dicmess.update({'type':'sendtowx'})
+                print dicjson
             else:
+                messages= urllib.unquote(form[-1]).replace('+',' ').split('&')
+                messlen = len(messages)
+                print messlen
+                print messages
                 for i in range(0,messlen):
                     tmp=messages[i].split('=')
                     if len(tmp)==2: dicmess.update({tmp[0]:tmp[1]})
