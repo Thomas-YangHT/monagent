@@ -185,7 +185,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                         (status,novalue) = commands.getstatusoutput('if [ ! -d /root/log ];then mkdir /root/log; fi')
                         (status,novalue) = commands.getstatusoutput('if [ ! -f /root/log/'+uf+' ];then touch /root/log/'+uf+'; fi')
                         if dicmess['type'] == 'baseinfo' or dicmess['type'] == 'k8sinfo' :
-                            (status,novalue) = commands.getstatusoutput('trueth=\`grep' +dicmess['ip']+ '/root/log/'+uf+'\`;if [ -n "${trueth}" ]; then sed -i \'/'+dicmess['ip']+'/d\' /root/log/'+uf+'; fi')
+                            (status,novalue) = commands.getstatusoutput('trueth=\`grep ' +dicmess['ip']+ ' /root/log/'+uf+'\`;if [ -n "${trueth}" ]; then sed -i \'/'+dicmess['ip']+'/d\' /root/log/'+uf+'; fi')
                             f2 = open('/root/log/'+uf,'a')
                         else:
                             f2 = open('/root/log/'+uf,'wb')
