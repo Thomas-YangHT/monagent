@@ -148,9 +148,9 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 if strtmp.find("Content-Type: application/json") == 0 : CType='json'
                 if strtmp.find("User-Agent: Grafana") != -1 : Alert='grafana'
 
-            print dichead
-            print "CType:",CType
-            print "Alert:",Alert
+            #print dichead
+            #print "CType:",CType
+            #print "Alert:",Alert
 
             dicmess={}
             if CType == 'json' and Alert == 'grafana':
@@ -158,7 +158,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 dicmess.update({'info':dicjson['message']})
                 dicmess.update({'secid':secid})
                 dicmess.update({'type':'sendtowx'})
-                print dicjson
+                print dicjson['message']
             else:
                 messages= urllib.unquote(form[-1]).replace('+',' ').split('&')
                 messlen = len(messages)
