@@ -139,8 +139,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             #print request
             #messages= urllib.unquote(MySQLdb.escape_string(form[-1])).replace('+',' ').split('&')
             for strtmp in form:
-                print strtmp
-                if strtmp.find("Content-Type: application/json") != -1: 
+                print "::",strtmp
+                if strtmp.find("Content-Type: application/json") == 0: 
                     CType='json'
                 else: 
                     CType=''
@@ -160,7 +160,7 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 for i in range(0,messlen):
                     tmp=messages[i].split('=')
                     if len(tmp)==2: dicmess.update({tmp[0]:tmp[1]})
-                    else: print "tmp len incorrect:"+tmp
+                    else: print "tmp len incorrect:",tmp
             
             for key in dicmess:
                 print key,dicmess[key]
