@@ -155,10 +155,11 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             if CType == 'json' and Alert == 'grafana':
                 dicjson=json.loads(urllib.unquote(form[-1]).replace('+',' '))
                 info=dicjson['title'] +":"
-                # info+=' '.join([ str(d) for d in dicjson['evalMatches'] ])
+                # info+=' '.join([ str(d.values()) for d in dicjson['evalMatches'] ])
                 for d in dicjson['evalMatches'] :
-                    for k,v in d.items() :
-                        info+=k+":"+v 
+                    for v in d.values() :
+                        info+=" "+str(v) 
+                    info+=";"
                 dicmess.update({'info':info})
                 dicmess.update({'secid':secid})
                 dicmess.update({'type':'sendtowx'})
