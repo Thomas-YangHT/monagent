@@ -75,7 +75,6 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
         #    print "time:",time.time()-begin
         #    if request and time.time()-begin > timeout:
         #        break
-        #request = self.request.recv(1024)
         f = open('/root/server8000.log','a')
         print 'Connected by',self.client_address[0]
         (status,datevalue) = commands.getstatusoutput('date "+ %Y%m%d %H:%M:%S"')
@@ -155,8 +154,11 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
             dicmess={}
             if CType == 'json' and Alert == 'grafana':
                 dicjson=json.loads(urllib.unquote(form[-1]).replace('+',' '))
-                info=dicjson['title'] +":"+ dicjson['message'] +":"
-                info+=' '.join([ str(d) for d in dicjson['evalMatches'] ])
+                info=dicjson['title'] +":"
+                # info+=' '.join([ str(d) for d in dicjson['evalMatches'] ])
+                for d in dicjson['evalMatches'] :
+                    for k,v in d.items() :
+                        info+=k+":"+v 
                 dicmess.update({'info':info})
                 dicmess.update({'secid':secid})
                 dicmess.update({'type':'sendtowx'})
