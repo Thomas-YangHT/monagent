@@ -157,9 +157,8 @@ class MyTCPHandler(SocketServer.BaseRequestHandler):
                 info=dicjson['title'] +":"
                 # info+=' '.join([ str(d.values()) for d in dicjson['evalMatches'] ])
                 for d in dicjson['evalMatches'] :
-                    for v in d.values() :
-                        info+=" "+str(v) 
-                    info+=";"
+                    info+=str(d['metrics'])+":"+str(d['value'])
+                    info+=";\n"
                 dicmess.update({'info':info})
                 dicmess.update({'secid':secid})
                 dicmess.update({'type':'sendtowx'})
